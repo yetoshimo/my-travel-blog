@@ -1,2 +1,2 @@
-web: gunicorn --pythonpath mytravelblog.mytravelblog.wsgi
+web: gunicorn mytravelblog.mytravelblog.wsgi
 release: python manage.py migrate
