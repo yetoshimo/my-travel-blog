@@ -30,10 +30,14 @@
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'show dashboard' %}"><span class="glyphicon glyphicon-list-alt"></span>
                         Dashboard</a></li>
-                    <li><a href="{% url 'register city' %}"><span class="glyphicon glyphicon-globe"></span> Register City</a></li>
-                    <li><a href="{% url 'register hotel' %}"><span class="glyphicon glyphicon-header"></span> Register Hotel</a></li>
-                    <li><a href="{% url 'register travel picture' %}"><span class="glyphicon glyphicon-picture"></span> Register Travel Picture</a></li>
-                    <li><a href="{% url 'register travel entry' %}"><span class="glyphicon glyphicon-book"></span> Register Travel Entry</a></li>
+                    <li><a href="{% url 'register city' %}"><span class="glyphicon glyphicon-globe"></span> Register
+                        City</a></li>
+                    <li><a href="{% url 'register hotel' %}"><span class="glyphicon glyphicon-header"></span> Register
+                        Hotel</a></li>
+                    <li><a href="{% url 'register travel picture' %}"><span class="glyphicon glyphicon-picture"></span>
+                        Register Travel Picture</a></li>
+                    <li><a href="{% url 'register travel entry' %}"><span class="glyphicon glyphicon-book"></span>
+                        Register Travel Entry</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -41,8 +45,17 @@
                     <li>
                         <a href="{% url 'profile details' request.user.pk %}">Welcome, {{ request.user.get_email_username }}
                             !</a></li>
-                    <li><img src="{{ request.user.profile.profile_picture }}" alt="profile picture" class="img-circle"
-                             style="height: 50px; width: 50px"></li>
+                    <li>
+                        {% if request.user.profile.profile_picture %}
+                            <img src="{{ request.user.profile.profile_picture }}" alt="profile picture"
+                                 class="img-circle"
+                                 style="height: 50px; width: 50px">
+                        {% else %}
+                            <img src="{% get_media_prefix %}{{ 'default_profile_picture.png' }}"
+                                 alt="Default Profile Picture" class="img-circle"
+                                 style="height: 50px; width: 50px">
+                        {% endif %}
+                    </li>
                     <li><a href="{% url 'logout user confirmation' %}"><span class="glyphicon glyphicon-log-out"></span>
                         Log Out</a></li>
                 {% else %}
