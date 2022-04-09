@@ -82,6 +82,8 @@ class Profile(models.Model):
         validators=(
             MaxLengthValidator(URL_FIELD_MAX_LENGTH),
         ),
+        null=True,
+        blank=True,
     )
 
     date_of_birth = models.DateField(
