@@ -212,9 +212,10 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
     )
 
     def clean(self):
+        __initial_email = self.initial['email']
         cleaned_data = super().clean()
         email = self.cleaned_data['email']
-        if MyTravelBlogUser.objects.filter(email=email).exists():
+        if __initial_email != email and MyTravelBlogUser.objects.filter(email=email).exists():
             raise ValidationError(f'User with this Email already exists.')
         return cleaned_data
 
@@ -230,10 +231,19 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
             'current_country',
         )
 
+        labels = {
+            'profile_picture': 'Profile Picture:',
+        }
+
         widgets = {
             'date_of_birth': forms.SelectDateWidget(
                 years=BIRTH_YEAR_RANGE,
             ),
             'email': forms.EmailInput(),
             'current_country': forms.TextInput(),
+            'profile_picture': forms.URLInput(
+                attrs={
+                    'placeholder': 'Enter profile picture URL',
+                },
+            ),
         }
