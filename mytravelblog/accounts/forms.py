@@ -39,6 +39,7 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
+        self.fields['profile_picture'].required = False
 
     email = forms.EmailField(
         label='Email:',
