@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <form method="post">
+        {% csrf_token %}
+{#        {{ form }}#}
+        <div class="panel panel-default center-block" style="max-width:25%">
+            <div class="panel-heading text-center">
+                <h3>Are you sure you want to delete your profile?</h3>
+            </div>
+            <div class="panel-body">
+
+                <br>
+                <div class="row" style="text-align: center">
+                    {{ form }}
+                    <div class="col-lg-6">
+                        <button class="btn btn btn-primary btn-danger btn-lg float-left" type="submit">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                            Yes, delete!
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <a href="javascript:history.back()" class="btn btn btn-primary btn-success btn-lg float-right"
+                           type="submit">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            No, go back!
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

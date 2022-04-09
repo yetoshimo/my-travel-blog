@@ -1,0 +1,32 @@
+body {
+    padding-top: 50px;
+}
+
+footer {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    padding: 15px;
+    text-align: center;
+    color: #9d9d9d;
+    font-weight: bold;
+    background-color: #222222;
+}
+
+.center {
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    transform: translate(0, -50%);
+    padding: 100px;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2vw;
+}
+
+h2, h3, h4, h5, h6 {
+    font-size: 1vw;
+}

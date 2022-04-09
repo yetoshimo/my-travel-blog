@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <div class="panel panel-default center-block" style="max-width:25%">
+        <div class="panel-heading text-center">
+            <h3>Login to Your Profile</h3>
+        </div>
+        <div class="panel-body">
+            <form method="post" action="{% url 'login user' %}">
+                {{ form }}
+                {% csrf_token %}
+                <br>
+                <div class="row" style="text-align: center">
+                    <button class="btn btn btn-primary btn-default" type="submit">
+                        <span class="glyphicon glyphicon-log-in"></span>
+                        Log in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

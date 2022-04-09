@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <div class="row panel panel-default center-block" style="width:50%">
+        <div class="panel-heading text-center">
+            <h1 class="text-center">
+                {% if travel_entries %}
+                    All Travel Memories
+                {% else %}
+                    No Memories Yet...
+                {% endif %}
+            </h1>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for travel_entry in travel_entries %}
+                    <div class="col-sm-4">
+                        <a href="{% url 'travel entry details' travel_entry.pk %}" class="btn btn btn-default btn-md">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            {{ travel_entry.title }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if cities or hotels or travel_pictures %}
+            <div class="panel-body">
+                <div class="row">
+                    {% if cities %}
+                        <div class="col-lg-4" style="text-align: left">
+                            <a href="{% url 'cities view' %}" class="btn btn-primary">Show Visited Cities</a>
+                        </div>
+                    {% endif %}
+                    {% if hotels %}
+                        <div class="col-lg-4" style="text-align: center">
+                            <a href="{% url 'hotels view' %}" class="btn btn-primary">Show Visited Hotels</a>
+                        </div>
+                    {% endif %}
+                    {% if travel_pictures %}
+                        <div class="col-lg-4" style="text-align: right">
+                            <a href="{% url 'travel pictures view' %}" class="btn btn-primary">Show Travel Pictures</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

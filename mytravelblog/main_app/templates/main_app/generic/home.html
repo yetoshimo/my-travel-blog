@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <h1 class="text-center">Welcome to My Travel Blog!</h1>
+
+    <br>
+    <div class="container-fluid">
+        <img class="img-responsive center-block"
+             width="25%"
+             src="https://thumbs.dreamstime.com/b/travel-world-landmarks-background-blue-sky-46083021.jpg"
+             alt="travel-picture">
+    </div>
+    <br>
+    <h2 class="text-center">Save your travel memories.</h2>
+    <div class="row" style="text-align: center">
+        <div class="col-lg-6">
+            <h4>
+                Already a user?
+            </h4>
+            <a href="{% url 'login user' %}" class="btn btn btn-primary btn-lg">
+                <span class="glyphicon glyphicon-log-in"></span>
+                Log in
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <h4>
+                Register New Account
+            </h4>
+            <a href="{% url 'profile create' %}" class="btn btn btn-success btn-lg">
+                <span class="glyphicon glyphicon-user"></span>
+                Sign Up
+            </a>
+        </div>
+    </div>
+
+{% endblock %}
