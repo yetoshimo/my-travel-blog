@@ -6,7 +6,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 from mytravelblog.accounts.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
 from mytravelblog.accounts.models import Profile, MyTravelBlogUser
-from mytravelblog.accounts.validators import validate_name, validate_name_length
+from mytravelblog.accounts.validators import *
 
 UserModel = get_user_model()
 
@@ -122,10 +122,10 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
         first_name = self.cleaned_data.get('first_name')
         last_name = self.cleaned_data.get('last_name')
         cleaned_data['current_country'] = self.cleaned_data.get('current_country').title()
-        validate_name(first_name)
-        validate_name_length(first_name)
-        validate_name(last_name)
-        validate_name_length(last_name)
+        validate_first_name(first_name)
+        validate_first_name_length(first_name)
+        validate_last_name(last_name)
+        validate_last_name_length(last_name)
 
         return cleaned_data
 

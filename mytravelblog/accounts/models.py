@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 
 from mytravelblog.accounts.managers import MyTravelBlogUserManager
-from mytravelblog.accounts.validators import validate_name
+from mytravelblog.accounts.validators import *
 
 
 class MyTravelBlogUser(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
@@ -66,7 +66,7 @@ class Profile(models.Model):
         max_length=FIRST_NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(FIRST_NAME_MIN_LENGTH),
-            validate_name,
+            validate_first_name,
         ),
     )
 
@@ -74,7 +74,7 @@ class Profile(models.Model):
         max_length=LAST_NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(LAST_NAME_MIN_LENGTH),
-            validate_name,
+            validate_last_name,
         )
     )
 
