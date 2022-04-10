@@ -3,9 +3,8 @@ from django.contrib.auth.hashers import make_password
 
 
 class MyTravelBlogUserManager(BaseUserManager):
-    TERMINAL_USER_FIRST_NAME = 'Terminal First'
-    TERMINAL_USER_LAST_NAME = 'Terminal Last'
-    TERMINAL_USER_PROFILE_PICTURE = 'Terminal Picture'
+    TERMINAL_USER_FIRST_NAME = 'TerminalFirst'
+    TERMINAL_USER_LAST_NAME = 'TerminalLast'
 
     def _create_user(self, email, password, **extra_fields):
 
@@ -20,7 +19,6 @@ class MyTravelBlogUserManager(BaseUserManager):
         profile = Profile(
             first_name=self.TERMINAL_USER_FIRST_NAME,
             last_name=self.TERMINAL_USER_LAST_NAME,
-            profile_picture=self.TERMINAL_USER_PROFILE_PICTURE,
             user=user,
         )
         profile.save()
