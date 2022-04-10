@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <div class="row">
+        {% for item in object_list %}
+            <div class="col-xs">
+                <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center">
+                        {% block panel_heading_details %}
+                        {% endblock %}
+                    </div>
+                    <div class="panel-body">
+                        <a href="{% block edit_url_details %}{% endblock %}" class="btn btn-primary"
+                           style="float: left">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Edit</a>
+                        <a href="{% block delete_url_details %}{% endblock %}" class="btn btn-danger"
+                           style="float: right">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -48,7 +48,7 @@
                     <li>
                         {% if request.user.profile.profile_picture %}
                             <img src="{{ request.user.profile.profile_picture }}" alt="profile picture"
-                                 class="img-circle"
+                                 class="img-rounded"
                                  style="height: 50px; width: 50px">
                         {% else %}
                             <img src="{% static 'default_files/default_profile_picture.png' %}"
@@ -68,13 +68,13 @@
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container" style="max-width: 75%">
     {% block page_content %}
     {% endblock %}
 </div>
 
-<footer>
-    <div>
+<footer class="footer">
+    <div class="container" style="text-align: center">
         2022 - Python Web-Framework Final Project by yetoshimo
     </div>
 </footer>

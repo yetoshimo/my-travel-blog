@@ -113,6 +113,8 @@ class TravelPicture(models.Model):
         validators=(
             MaxLengthValidator(URL_FIELD_MAX_LENGTH),
         ),
+        null=True,
+        blank=True,
     )
 
     located_city = models.ForeignKey(

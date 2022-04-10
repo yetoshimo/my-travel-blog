@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="panel panel-danger center-block">
+            <div class="panel-heading" style="text-align: center">
+                {% block panel_heading_detail %}
+                {% endblock %}
+            </div>
+            <div class="panel-body">
+                {{ form }}
+                <div class="col-sm" style="float: left;">
+                    <button class="btn btn-danger" type="submit">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Yes!
+                    </button>
+                </div>
+                <div class="col-sm" style="float: right;">
+                    <a href="javascript:history.back()" class="btn btn-success"
+                       type="submit">
+                        <span class="glyphicon glyphicon-log-in"></span>
+                        No!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

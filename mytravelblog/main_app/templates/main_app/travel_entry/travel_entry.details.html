@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_content %}
 
-    <div class="panel panel-default center-block" style="max-width:25%">
-        <div class="panel-heading text-center">
+    <div class="panel panel-info">
+        <div class="panel-heading" style="text-align: center">
             <h3>{{ travel_entry.title }}</h3>
         </div>
         <div class="panel-body" style="text-align: center">
@@ -13,15 +14,26 @@
             <br>
             <p>Visited Hotel: {{ travel_entry.visited_hotel.hotel_name }}</p>
             <br>
-            <img src="{{ travel_entry.travel_picture.travel_picture }}" class="thumbnail img-responsive"
-                 alt="Travel Picture">
-            <p>Published On: {{ travel_entry.publish_date_time }}</p>
+            {% if travel_entry.travel_picture.travel_picture %}
+                <img src="{{ travel_entry.travel_picture.travel_picture }}" class="thumbnail img-responsive"
+                     alt="Travel Picture">
+            {% else %}
+                <img src="{% static 'default_files/world_default_picture.png' %}"
+                     alt="Default Travel Picture"
+                     class="img-responsive img-thumbnail"
+                     style="max-width: 50%;">
+            {% endif %}
             <br>
-            <div class="row" style="text-align: center">
-                    <a href="{% url 'travel entry edit' travel_entry.pk %}" class="btn btn btn-primary btn-md">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        Edit
-                    </a>
+            <p>Published On: {{ travel_entry.publish_date_time }}</p>
+            <div class="panel-body">
+                <a href="{% url 'travel entry edit' travel_entry.pk %}" class="btn btn-primary"
+                   style="float: left">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Edit</a>
+                <a href="{% url 'travel entry delete' travel_entry.pk %}" class="btn btn-danger"
+                   style="float: right">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete</a>
             </div>
         </div>
     </div>

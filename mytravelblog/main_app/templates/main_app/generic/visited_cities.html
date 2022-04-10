@@ -1,21 +1,11 @@
-{% extends 'base.html' %}
-{% block page_content %}
-
-    <div class="row center-block" style="max-width: 50%">
-        {% for city in cities %}
-            <div class="col-xs-6 col-sm-4">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h3>{{ city.city_name }}</h3>
-                        <h4>{{ city.country_name }}</h4>
-                        <p>
-                            <a href="{% url 'city edit' city.pk %}" class="btn btn-primary" role="button">Edit</a>
-                            <a href="{% url 'city delete' city.pk %}" class="btn btn-danger" role="button">Delete</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
+{% extends 'base_visited.html' %}
+{% block panel_heading_details %}
+    <h3>{{ item.city_name }}</h3>
+    <h4>{{ item.country_name }}</h4>
+{% endblock %}
+{% block edit_url_details %}
+    {% url 'city edit' item.pk %}
+{% endblock %}
+{% block delete_url_details %}
+    {% url 'city delete' item.pk %}
 {% endblock %}

@@ -1,5 +1,6 @@
 body {
-    padding-top: 50px;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 footer {
@@ -8,25 +9,17 @@ footer {
     left: 0;
     bottom: 0;
     padding: 15px;
-    text-align: center;
     color: #9d9d9d;
     font-weight: bold;
     background-color: #222222;
+    font-size: 12px;
 }
 
-.center {
-    position: absolute;
-    margin: auto;
-    top: 50%;
-    transform: translate(0, -50%);
-    padding: 100px;
-    width: 100%;
-}
-
-h1 {
-    font-size: 2vw;
-}
-
-h2, h3, h4, h5, h6 {
-    font-size: 1vw;
-}
+/*.center {*/
+/*    position: absolute;*/
+/*    margin: auto;*/
+/*    top: 50%;*/
+/*    transform: translate(0, -50%);*/
+/*    padding: 100px;*/
+/*    width: 100%;*/
+/*}*/

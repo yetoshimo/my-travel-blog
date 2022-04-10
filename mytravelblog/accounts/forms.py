@@ -16,7 +16,7 @@ class UserLoginForm(AuthenticationForm, BootstrapFormMixin):
         self._init_bootstrap_form_controls()
 
     username = UsernameField(
-        widget=forms.TextInput(
+        widget=forms.EmailInput(
             attrs={
                 'placeholder': 'Enter your email',
                 'autofocus': True,

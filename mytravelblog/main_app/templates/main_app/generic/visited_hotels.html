@@ -1,28 +1,16 @@
-{% extends 'base.html' %}
-{% block page_content %}
-
-    <div class="row center-block" style="max-width: 35%">
-        {% for hotel in hotels %}
-            <div class="col-xs-6 col-sm-6">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h3>
-                            {{ hotel.hotel_name }}
-                        </h3>
-                        <h4>
-                            {% for i in hotel.star_count|make_list %}
-                                <span class="glyphicon glyphicon-star" aria-hidden="true" style="font-size: 75%"></span>
-                            {% endfor %}
-                        </h4>
-                        <h4>{{ hotel.located_city }}</h4>
-                        <p>
-                            <a href="{% url 'hotel edit' hotel.pk %}" class="btn btn-primary" role="button">Edit</a>
-                            <a href="{% url 'hotel delete' hotel.pk %}" class="btn btn-danger" role="button">Delete</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+{% extends 'base_visited.html' %}
+{% block panel_heading_details %}
+    <h3>{{ item.hotel_name }}</h3>
+    <h4>
+        {% for i in item.star_count|make_list %}
+            <span class="glyphicon glyphicon-star" aria-hidden="true" style="font-size: 75%"></span>
         {% endfor %}
-    </div>
-
+    </h4>
+    <h4>{{ item.located_city }}</h4>
+{% endblock %}
+{% block edit_url_details %}
+    {% url 'hotel edit' item.pk %}
+{% endblock %}
+{% block delete_url_details %}
+    {% url 'hotel delete' item.pk %}
 {% endblock %}
