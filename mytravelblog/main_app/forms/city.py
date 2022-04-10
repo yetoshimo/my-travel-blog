@@ -1,7 +1,19 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from mytravelblog.accounts.helpers import BootstrapFormMixin
 from mytravelblog.main_app.models import VisitedCity
+
+
+def _validate_city_name(user, city_name, country_name):
+    __city_name = city_name.title()
+    __country_name = country_name.title()
+    if VisitedCity.objects.filter(user=user,
+                                  city_name=__city_name,
+                                  country_name=__country_name).exists():
+        raise ValidationError(f'{__city_name} '
+                              f'in {__country_name} already exists!')
+    return __city_name, __country_name
 
 
 class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
@@ -12,8 +24,9 @@ class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_data['country_name'] = self.cleaned_data['country_name'].title()
-        cleaned_data['city_name'] = self.cleaned_data['city_name'].title()
+        self.cleaned_data['city_name'], \
+        self.cleaned_data['country_name'] = \
+            _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
         return cleaned_data
 
     def save(self, commit=True):
@@ -48,14 +61,16 @@ class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
 
 
 class CityEditForm(forms.ModelForm, BootstrapFormMixin):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         self._init_bootstrap_form_controls()
 
     def clean(self):
         cleaned_data = super().clean()
-        self.cleaned_data['country_name'] = self.cleaned_data['country_name'].title()
-        self.cleaned_data['city_name'] = self.cleaned_data['city_name'].title()
+        self.cleaned_data['city_name'], \
+        self.cleaned_data['country_name'] = \
+            _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
         return cleaned_data
 
     class Meta:
@@ -65,6 +80,14 @@ class CityEditForm(forms.ModelForm, BootstrapFormMixin):
             'city_name',
             'country_name',
         )
+
+        widgets = {
+            'city_name': forms.TextInput(
+                attrs={
+                    'autofocus': True,
+                },
+            ),
+        }
 
 
 class CityDeleteForm(forms.ModelForm, BootstrapFormMixin):

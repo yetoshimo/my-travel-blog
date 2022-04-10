@@ -42,6 +42,7 @@ class VisitedCity(models.Model):
         verbose_name_plural = 'Cities'
 
         unique_together = (
+            'user',
             'city_name',
             'country_name',
         )
@@ -93,6 +94,7 @@ class VisitedHotel(models.Model):
         verbose_name_plural = 'Hotels'
 
         unique_together = (
+            'user',
             'located_city',
             'hotel_name',
         )

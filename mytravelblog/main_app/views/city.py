@@ -42,6 +42,11 @@ class EditVisitedCityView(LoginRequiredMixin, generic_views.UpdateView):
     form_class = CityEditForm
     context_object_name = 'city'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 class DeleteVisitedCityView(LoginRequiredMixin, generic_views.DeleteView):
     model = VisitedCity
