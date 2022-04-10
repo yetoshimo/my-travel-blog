@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <div class="panel panel-default center-block" style="max-width:25%">
-        <div class="panel-heading text-center">
-            <h3>Are you sure you want to log out?</h3>
-        </div>
-        <div class="panel-body">
-            <form method="post" action="{% url 'logout user' %}">
+    <form method="post" action="{% url 'logout user' %}">
+        {% csrf_token %}
+        <div class="panel panel-danger center-block">
+            <div class="panel-heading" style="text-align: center">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="panel-body">
                 {{ form }}
-                {% csrf_token %}
-                <br>
-                <div class="row" style="text-align: center">
-                    <div class="col-lg-6">
-                        <a href="{% url 'logout user' %}" class="btn btn btn-primary btn-danger btn-lg float-left" type="submit">
-                            <span class="glyphicon glyphicon-log-out"></span>
-                            Yes, logout!
-                        </a>
-                    </div>
-                    <div class="col-lg-6">
-                        <a href="javascript:history.back()" class="btn btn btn-primary btn-success btn-lg float-right" type="submit">
-                            <span class="glyphicon glyphicon-log-in"></span>
-                            No, go back!
-                        </a>
-                    </div>
+                <div class="col-sm" style="float: left;">
+                    <button class="btn btn-danger" type="submit">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Logout!
+                    </button>
                 </div>
-            </form>
+                <div class="col-sm" style="float: right;">
+                    <a href="javascript:history.back()" class="btn btn-success" type="submit">
+                        <span class="glyphicon glyphicon-log-in"></span>
+                        Go back!
+                    </a>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </form>
 
 {% endblock %}
