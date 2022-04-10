@@ -23,7 +23,7 @@ class TravelPictureRegisterView(LoginRequiredMixin, generic_views.CreateView):
         result = VisitedCity.objects.filter(user=self.request.user).all()
         if result:
             return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        return redirect('register city')
 
 
 class TravelPicturesView(LoginRequiredMixin, generic_views.ListView):
