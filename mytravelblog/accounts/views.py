@@ -11,8 +11,8 @@ class UserRegisterView(generic_views.CreateView):
     success_url = reverse_lazy('show dashboard')
     form_class = CreateProfileForm
 
-    def form_valid(self, *args, **kwargs):
-        result = super().form_valid(*args, **kwargs)
+    def form_valid(self, form, *args, **kwargs):
+        result = super().form_valid(form)
         login(self.request, self.object)
         return result
 

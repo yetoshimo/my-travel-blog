@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db.models import signals
 from django.dispatch import receiver
 
-from mytravelblog.accounts.forms import CreateProfileForm
 from mytravelblog.accounts.models import *
 
 
@@ -18,8 +17,7 @@ def post_delete_user(sender, instance, *args, **kwargs):
 
 @admin.register(MyTravelBlogUser)
 class UserAdmin(admin.ModelAdmin):
-    model = Profile
-    form = CreateProfileForm
+    inlines = (ProfileInlineAdmin,)
     list_display = ('email', 'current_country',)
     list_filter = ('current_country',)
     exclude = (
@@ -34,9 +32,6 @@ class UserAdmin(admin.ModelAdmin):
         'is_superuser',
         'groups',
         'user_permissions',
-        'first_name',
-        'last_name',
-        'profile_picture',
     )
 
 
