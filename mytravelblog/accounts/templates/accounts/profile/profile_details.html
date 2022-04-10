@@ -2,29 +2,32 @@
 {% load static %}
 {% block page_content %}
 
-    <div class="row panel panel-default center-block" style="width:50%">
-        <div class="panel-heading text-center">
-            <h3>{{ profile.get_full_name }} Profile Details</h3>
+    <div class="panel panel-info">
+        <div class="panel-heading" style="text-align: center">
+            <h4>{{ profile.get_full_name }} Profile Details</h4>
         </div>
         <div class="panel-body">
-            <div class="col-lg-5">
-                {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture }}" alt="Profile Picture" class="img-thumbnail">
-                {% else %}
-                    <img src="{% static 'default_files/default_profile_picture.png' %}" alt="Default Profile Picture" class="img-thumbnail">
-                {% endif %}
-            </div>
-            <div class="col-lg-5">
-                <h4>First Name: {{ profile.first_name }}</h4>
-                <h4>Last Name: {{ profile.last_name }}</h4>
-                {% if profile.date_of_birth %}
-                    <h4>Date of Birth: {{ profile.date_of_birth }}</h4>
-                {% endif %}
-                <h4>Current Country: {{ profile.user.current_country }}</h4>
-                <h4>Email: {{ profile.user.email }}</h4>
-                <a href="{% url 'profile edit' profile.pk %}" class="btn btn-primary">Edit Profile</a>
-                <a href="{% url 'change password' profile.pk %}" class="btn btn-warning">Change Password</a>
-                <a href="{% url 'profile delete' profile.pk %}" class="btn btn-danger">Delete Profile</a>
+            <div class="row">
+                <div class="col-sm-6">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture }}" alt="Profile Picture" class="img-thumbnail">
+                    {% else %}
+                        <img src="{% static 'default_files/default_profile_picture.png' %}"
+                             alt="Default Profile Picture" class="img-thumbnail">
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    <h5>First Name: {{ profile.first_name }}</h5>
+                    <h5>Last Name: {{ profile.last_name }}</h5>
+                    {% if profile.date_of_birth %}
+                        <h5>Date of Birth: {{ profile.date_of_birth }}</h5>
+                    {% endif %}
+                    <h5>Current Country: {{ profile.user.current_country }}</h5>
+                    <h5>Email: {{ profile.user.email }}</h5>
+                    <a href="{% url 'profile edit' profile.pk %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'change password' profile.pk %}" class="btn btn-warning">Change Password</a>
+                    <a href="{% url 'profile delete' profile.pk %}" class="btn btn-danger">Delete Profile</a>
+                </div>
             </div>
         </div>
     </div>
