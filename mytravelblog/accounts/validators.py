@@ -19,4 +19,4 @@ def validate_last_name(last_name):
 
 def validate_last_name_length(last_name):
     if len(last_name) < 2:
-        raise ValidationError({'first_name': f'Ensure this value has at least 2 characters (it has {len(last_name)}).'})
+        raise ValidationError({'last_name': f'Ensure this value has at least 2 characters (it has {len(last_name)}).'})
