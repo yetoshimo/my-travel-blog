@@ -45,6 +45,14 @@ class MyTravelBlogUser(auth_models.AbstractBaseUser, auth_models.PermissionsMixi
     def save(self, *args, **kwargs):
         self.current_country = self.current_country.title()
         super().save(*args, **kwargs)
+        user = MyTravelBlogUser.objects.get(email=self.email)
+        if not Profile.objects.filter(user=user).exists():
+            profile = Profile.objects.create(
+                first_name=user.get_email_username,
+                last_name=user.get_email_username,
+                user=user,
+            )
+            profile.save()
 
     objects = MyTravelBlogUserManager()
 
