@@ -1,4 +1,4 @@
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, RegexValidator
 from django.db import models
 from django.contrib.auth import models as auth_models
 
@@ -66,7 +66,9 @@ class Profile(models.Model):
         max_length=FIRST_NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(FIRST_NAME_MIN_LENGTH),
-            validate_first_name,
+            RegexValidator(regex='^([a-zA-Z]+)$',
+                           message='Ensure this value contains only letters.',
+                           code='Invalid first name'),
         ),
     )
 
@@ -74,8 +76,10 @@ class Profile(models.Model):
         max_length=LAST_NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(LAST_NAME_MIN_LENGTH),
-            validate_last_name,
-        )
+            RegexValidator(regex='^([a-zA-Z]+)$',
+                           message='Ensure this value contains only letters.',
+                           code='Invalid last name'),
+        ),
     )
 
     profile_picture = models.URLField(

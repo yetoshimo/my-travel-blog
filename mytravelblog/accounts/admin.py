@@ -20,6 +20,7 @@ class UserAdmin(admin.ModelAdmin):
     inlines = (ProfileInlineAdmin,)
     list_display = ('email', 'current_country',)
     list_filter = ('current_country',)
+
     exclude = (
         'password',
         'last_login',
