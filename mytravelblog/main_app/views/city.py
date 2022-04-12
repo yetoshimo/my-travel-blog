@@ -18,6 +18,11 @@ class CityRegisterView(LoginRequiredMixin, generic_views.CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_cities'] = VisitedCity.objects.filter(user=self.request.user).exists()
+        return context
+
 
 class VisitedCitiesView(LoginRequiredMixin, generic_views.ListView):
     model = VisitedCity
