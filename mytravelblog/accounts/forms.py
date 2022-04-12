@@ -137,6 +137,8 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 'placeholder': 'Enter first name',
             },
         ),
+        null=True,
+        blank=True,
 
     )
 
@@ -147,7 +149,8 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 'placeholder': 'Enter last name',
             },
         ),
-
+        null=True,
+        blank=True,
     )
 
     email = forms.EmailField(
@@ -157,6 +160,8 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 'placeholder': 'Enter email',
             },
         ),
+        null=True,
+        blank=True,
     )
 
     class Meta:
