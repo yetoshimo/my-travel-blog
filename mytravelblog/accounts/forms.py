@@ -135,11 +135,10 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Enter first name',
+                'autofocus': True,
             },
         ),
-        null=True,
-        blank=True,
-
+        required=False,
     )
 
     last_name = forms.CharField(
@@ -149,8 +148,7 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 'placeholder': 'Enter last name',
             },
         ),
-        null=True,
-        blank=True,
+        required=False,
     )
 
     email = forms.EmailField(
@@ -160,8 +158,7 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 'placeholder': 'Enter email',
             },
         ),
-        null=True,
-        blank=True,
+        required=False,
     )
 
     class Meta:
