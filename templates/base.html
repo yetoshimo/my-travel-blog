@@ -43,7 +43,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li>
-                        <a href="{% url 'profile details' request.user.pk %}">Welcome, {{ request.user.get_email_username }}
+                        <a href="{% url 'profile details' request.user.pk %}">Welcome, {{ request.user.username }}
                             !</a></li>
                     <li>
                         {% if request.user.profile.profile_picture %}

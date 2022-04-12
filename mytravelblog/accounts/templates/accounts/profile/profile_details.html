@@ -4,7 +4,7 @@
 
     <div class="panel panel-info">
         <div class="panel-heading" style="text-align: center">
-            <h4>{{ profile.get_full_name }} Profile Details</h4>
+            <h4><b>{{ profile.user.username }}</b> Profile Details</h4>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -17,12 +17,14 @@
                     {% endif %}
                 </div>
                 <div class="col-sm-6">
-                    <h5>First Name: {{ profile.first_name }}</h5>
-                    <h5>Last Name: {{ profile.last_name }}</h5>
+                    <h5>First Name: {{ profile.user.first_name }}</h5>
+                    <h5>Last Name: {{ profile.user.last_name }}</h5>
                     {% if profile.date_of_birth %}
                         <h5>Date of Birth: {{ profile.date_of_birth }}</h5>
                     {% endif %}
-                    <h5>Current Country: {{ profile.user.current_country }}</h5>
+                    {% if profile.current_country %}
+                        <h5>Current Country: {{ profile.current_country }}</h5>
+                    {% endif %}
                     <h5>Email: {{ profile.user.email }}</h5>
                     <a href="{% url 'profile edit' profile.pk %}" class="btn btn-primary">Edit Profile</a>
                     <a href="{% url 'change password' profile.pk %}" class="btn btn-warning">Change Password</a>

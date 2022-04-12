@@ -5,6 +5,8 @@ from django.views import generic as generic_views
 
 from mytravelblog.accounts.forms import *
 
+UserModel = get_user_model()
+
 
 class UserRegisterView(generic_views.CreateView):
     template_name = 'accounts/profile/profile_create.html'
@@ -13,11 +15,6 @@ class UserRegisterView(generic_views.CreateView):
 
     def form_valid(self, form, *args, **kwargs):
         result = super().form_valid(form)
-        Profile.objects.create(
-            first_name=form.cleaned_data['first_name'],
-            last_name=form.cleaned_data['last_name'],
-            user=self.object,
-        )
         login(self.request, self.object)
         return result
 
@@ -57,8 +54,7 @@ class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['email'] = self.object.user.email
-        kwargs['current_country'] = self.object.user.current_country
+        kwargs['user'] = self.object.user
         return kwargs
 
     def get_success_url(self, **kwargs):
@@ -67,22 +63,17 @@ class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):
     def form_valid(self, form, *args, **kwargs):
         result = super().form_valid(form)
         user = self.object.user
+        user.first_name = form.cleaned_data['first_name']
+        user.last_name = form.cleaned_data['last_name']
         user.email = form.cleaned_data['email']
-        user.current_country = form.cleaned_data['current_country']
         user.save()
         return result
 
 
 class DeleteProfileView(LoginRequiredMixin, generic_views.DeleteView):
-    model = Profile
+    model = UserModel
     template_name = 'accounts/profile/delete_profile_page.html'
     success_url = reverse_lazy('show home')
-
-    def form_valid(self, form, *args, **kwargs):
-        user = self.object.user
-        user.delete()
-        result = super().form_valid(form)
-        return result
 
 
 class ChangeUserPasswordView(LoginRequiredMixin, auth_views.PasswordChangeView):

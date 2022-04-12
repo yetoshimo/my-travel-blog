@@ -1,12 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm, PasswordChangeForm
-from django.core.exceptions import ValidationError
-from django.core.validators import MaxLengthValidator, MinLengthValidator, RegexValidator
 
 from mytravelblog.accounts.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
-from mytravelblog.accounts.models import Profile, MyTravelBlogUser
-from mytravelblog.accounts.validators import *
+from mytravelblog.accounts.models import Profile
 
 UserModel = get_user_model()
 
@@ -17,9 +14,9 @@ class UserLoginForm(AuthenticationForm, BootstrapFormMixin):
         self._init_bootstrap_form_controls()
 
     username = UsernameField(
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
-                'placeholder': 'Enter your email',
+                'placeholder': 'Enter your username',
                 'autofocus': True,
             },
         ),
@@ -46,73 +43,42 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
-        self.fields['profile_picture'].required = False
-        self.fields['email'].widget.attrs['placeholder'] = 'Enter your email address'
-        self.fields['password1'].widget.attrs['placeholder'] = 'Enter password'
-        self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
 
-    current_country = forms.CharField(
-        label='Current Country:',
+    username = UsernameField(
+        label='Username',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Enter current country'
+                'autofocus': True,
+                'placeholder': 'Enter username',
             }
         )
     )
 
-    first_name = forms.CharField(
-        max_length=FIRST_NAME_MAX_LENGTH,
-        label='First Name:',
-        widget=forms.TextInput(
+    password1 = forms.CharField(
+        label='Password',
+        strip=False,
+        widget=forms.PasswordInput(
             attrs={
-                'placeholder': 'Enter first name',
-            },
-        ),
-        validators=(
-            MinLengthValidator(FIRST_NAME_MIN_LENGTH),
-            RegexValidator(regex='^([a-zA-Z]+)$',
-                           message='Ensure this value contains only letters.',
-                           code='Invalid first name'),
-        )
+                "autocomplete": "new-password",
+                'placeholder': 'Enter password',
+            }),
     )
 
-    last_name = forms.CharField(
-        max_length=LAST_NAME_MAX_LENGTH,
-        label='Last Name:',
-        widget=forms.TextInput(
+    password2 = forms.CharField(
+        label='Password Confirmation',
+        widget=forms.PasswordInput(
             attrs={
-                'placeholder': 'Enter last name',
-            },
-        ),
-        validators=(
-            MinLengthValidator(LAST_NAME_MIN_LENGTH),
-            RegexValidator(regex='^([a-zA-Z]+)$',
-                           message='Ensure this value contains only letters.',
-                           code='Invalid last name'),
-        ),
-    )
-
-    profile_picture = forms.URLField(
-        label='Profile Picture URL:',
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Enter profile picture URL',
-            },
-        ),
-        validators=(
-            MaxLengthValidator(URL_FIELD_MAX_LENGTH),
-        ),
+                "autocomplete": "new-password",
+                'placeholder': 'Re-enter password',
+            }),
+        strip=False,
     )
 
     class Meta:
         model = UserModel
 
         fields = (
-            'email',
-            'first_name',
-            'last_name',
-            'current_country',
-            'profile_picture',
+            'username',
             'password1',
             'password2',
         )
@@ -125,7 +91,7 @@ class EditPasswordForm(PasswordChangeForm, BootstrapFormMixin):
         self._init_bootstrap_form_controls()
 
     old_password = forms.CharField(
-        label='Old Password:',
+        label='Old Password',
         strip=False,
         widget=forms.PasswordInput(
             attrs={
@@ -136,7 +102,7 @@ class EditPasswordForm(PasswordChangeForm, BootstrapFormMixin):
     )
 
     new_password1 = forms.CharField(
-        label='New Password:',
+        label='New Password',
         widget=forms.PasswordInput(
             attrs={
                 'placeholder': 'Enter new password',
@@ -145,7 +111,7 @@ class EditPasswordForm(PasswordChangeForm, BootstrapFormMixin):
     )
 
     new_password2 = forms.CharField(
-        label='New Password Confirmation:',
+        label='New Password Confirmation',
         widget=forms.PasswordInput(
             attrs={
                 'placeholder': 'Enter new password again',
@@ -155,38 +121,43 @@ class EditPasswordForm(PasswordChangeForm, BootstrapFormMixin):
 
 
 class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
-    EMAIL_MAX_LENGTH = 254
-    COUNTRIES_MAX_LENGTH = 50
-    COUNTRIES_MIN_LENGTH = 4
 
-    def __init__(self, email, current_country, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
+        self.fields['first_name'].initial = self.user.first_name
+        self.fields['last_name'].initial = self.user.last_name
+        self.fields['email'].initial = self.user.email
         self._init_bootstrap_form_controls()
-        self.initial['email'] = email
-        self.initial['current_country'] = current_country
+
+    first_name = forms.CharField(
+        label='First Name',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Enter first name',
+            },
+        ),
+
+    )
+
+    last_name = forms.CharField(
+        label='Last Name',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Enter last name',
+            },
+        ),
+
+    )
 
     email = forms.EmailField(
-        label='Email:',
-        validators=(
-            MaxLengthValidator(EMAIL_MAX_LENGTH),
-        )
+        label='Email Address',
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Enter email',
+            },
+        ),
     )
-
-    current_country = forms.CharField(
-        label='Current Country:',
-        validators=(
-            MaxLengthValidator(COUNTRIES_MAX_LENGTH),
-            MinLengthValidator(COUNTRIES_MIN_LENGTH),
-        )
-    )
-
-    def clean(self):
-        __initial_email = self.initial['email']
-        cleaned_data = super().clean()
-        email = self.cleaned_data['email']
-        if __initial_email != email and MyTravelBlogUser.objects.filter(email=email).exists():
-            raise ValidationError(f'User with this Email already exists.')
-        return cleaned_data
 
     class Meta:
         model = Profile
@@ -194,21 +165,16 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
         fields = (
             'first_name',
             'last_name',
+            'email',
             'profile_picture',
             'date_of_birth',
-            'email',
             'current_country',
         )
-
-        labels = {
-            'profile_picture': 'Profile Picture:',
-        }
 
         widgets = {
             'date_of_birth': forms.SelectDateWidget(
                 years=BIRTH_YEAR_RANGE,
             ),
-            'email': forms.EmailInput(),
             'current_country': forms.TextInput(),
             'profile_picture': forms.URLInput(
                 attrs={
