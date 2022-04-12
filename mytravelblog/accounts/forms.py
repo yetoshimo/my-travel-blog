@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator, RegexValidator
 
 from mytravelblog.accounts.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
 from mytravelblog.accounts.models import Profile, MyTravelBlogUser
@@ -47,34 +47,9 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
         self.fields['profile_picture'].required = False
-
-    email = forms.EmailField(
-        label='Email:',
-        widget=forms.EmailInput(
-            attrs={
-                'placeholder': 'Enter your email address',
-                'autofocus': True,
-            },
-        ),
-    )
-
-    password1 = forms.CharField(
-        label='Password:',
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Enter your password'
-            },
-        ),
-    )
-
-    password2 = forms.CharField(
-        label='Password Confirmation:',
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder': 'Enter the same password as before, for verification.'
-            },
-        ),
-    )
+        self.fields['email'].widget.attrs['placeholder'] = 'Enter your email address'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Enter password'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
 
     current_country = forms.CharField(
         label='Current Country:',
@@ -93,6 +68,12 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
                 'placeholder': 'Enter first name',
             },
         ),
+        validators=(
+            MinLengthValidator(FIRST_NAME_MIN_LENGTH),
+            RegexValidator(regex='^([a-zA-Z]+)$',
+                           message='Ensure this value contains only letters.',
+                           code='Invalid first name'),
+        )
     )
 
     last_name = forms.CharField(
@@ -102,6 +83,12 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
             attrs={
                 'placeholder': 'Enter last name',
             },
+        ),
+        validators=(
+            MinLengthValidator(LAST_NAME_MIN_LENGTH),
+            RegexValidator(regex='^([a-zA-Z]+)$',
+                           message='Ensure this value contains only letters.',
+                           code='Invalid last name'),
         ),
     )
 
@@ -116,32 +103,6 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
             MaxLengthValidator(URL_FIELD_MAX_LENGTH),
         ),
     )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        first_name = self.cleaned_data.get('first_name')
-        last_name = self.cleaned_data.get('last_name')
-        cleaned_data['current_country'] = self.cleaned_data.get('current_country').title()
-        validate_first_name(first_name)
-        validate_first_name_length(first_name)
-        validate_last_name(last_name)
-        validate_last_name_length(last_name)
-
-        return cleaned_data
-
-    def save(self, commit=True):
-        user = super().save(commit=commit)
-
-        profile = Profile(
-            first_name=self.cleaned_data['first_name'],
-            last_name=self.cleaned_data['last_name'],
-            profile_picture=self.cleaned_data['profile_picture'],
-            user=user,
-        )
-
-        if commit:
-            profile.save()
-        return user
 
     class Meta:
         model = UserModel

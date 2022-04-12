@@ -13,6 +13,11 @@ class UserRegisterView(generic_views.CreateView):
 
     def form_valid(self, form, *args, **kwargs):
         result = super().form_valid(form)
+        Profile.objects.create(
+            first_name=form.cleaned_data['first_name'],
+            last_name=form.cleaned_data['last_name'],
+            user=self.object,
+        )
         login(self.request, self.object)
         return result
 
