@@ -1,3 +1,4 @@
+from cloudinary import forms as cloudinary_forms
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm, PasswordChangeForm
@@ -178,9 +179,4 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
                 years=BIRTH_YEAR_RANGE,
             ),
             'current_country': forms.TextInput(),
-            'profile_picture': forms.URLInput(
-                attrs={
-                    'placeholder': 'Enter profile picture URL',
-                },
-            ),
         }

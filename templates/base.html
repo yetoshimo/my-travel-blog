@@ -47,9 +47,11 @@
                             !</a></li>
                     <li>
                         {% if request.user.profile.profile_picture %}
-                            <img src="{{ request.user.profile.profile_picture }}" alt="profile picture"
-                                 class="img-rounded"
-                                 style="height: 50px; width: 50px">
+                            <a href="{% url 'profile details' request.user.pk %}" style="padding: 0"><img
+                                    src="{{ request.user.profile.profile_picture.url }}" alt="profile picture"
+                                    class="img-rounded"
+                                    style="width: 50px; height: 50px">
+                            </a>
                         {% else %}
                             <img src="{% static 'default_files/default_profile_picture.png' %}"
                                  alt="Default Profile Picture" class="img-circle"

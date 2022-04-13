@@ -10,7 +10,10 @@
             <div class="row">
                 <div class="col-sm-6 text-center">
                     {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture }}" alt="Profile Picture" class="img-thumbnail">
+                        <img src="{{ profile.profile_picture.url }}"
+                             alt="Profile Picture"
+                             class="img-thumbnail"
+                             style="max-width: 300px; max-height: 300px">
                     {% else %}
                         <img src="{% static 'default_files/default_profile_picture.png' %}"
                              alt="Default Profile Picture" class="img-thumbnail">

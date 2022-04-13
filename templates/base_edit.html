@@ -9,7 +9,7 @@
             </h3>
         </div>
         <div class="panel-body">
-            <form method="post" action="{% block form_detail %}{% endblock %}">
+            <form method="post" action="{% block form_detail %}{% endblock %}" enctype="multipart/form-data">
             {{ form }}
             {% csrf_token %}
             <br>

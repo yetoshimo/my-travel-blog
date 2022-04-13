@@ -14,7 +14,6 @@ class ProfileInlineAdmin(admin.StackedInline):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'current_country',)
     list_filter = ('user', 'current_country',)
-    readonly_fields = ('user',)
     ordering = ('user',)
 
 

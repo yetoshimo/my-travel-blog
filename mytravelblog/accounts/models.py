@@ -1,3 +1,5 @@
+import cloudinary.uploader
+from cloudinary import models as cloudinary_models
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -24,10 +26,11 @@ class Profile(models.Model):
         primary_key=True,
     )
 
-    profile_picture = models.URLField(
+    profile_picture = cloudinary_models.CloudinaryField(
         null=True,
         blank=True,
         verbose_name='Profile Picture',
+        use_filename=True,
     )
 
     date_of_birth = models.DateField(
@@ -64,3 +67,4 @@ def create_or_save_user_profile(sender, instance, created, **kwargs):
 @receiver(signals.post_delete, sender=Profile)
 def delete_profile_user(sender, instance, **kwargs):
     instance.user.delete()
+    cloudinary.uploader.destroy(instance.profile_picture.public_id, invalidate=True, )
