@@ -1,25 +1,20 @@
 from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
 
 
-def validate_first_name(first_name):
-    if not first_name.isalpha():
-        raise ValidationError(
-            {'first_name': 'Text must contain only letters!'})
+@deconstructible
+class ImageSizeInMBValidator:
+    def __init__(self, max_size_in_mb):
+        self.max_size_in_mb = max_size_in_mb
 
+    def __call__(self, value, *args, **kwargs):
+        filesize = value.file.size
+        if filesize > self.__megabytes_to_bytes(self.max_size_in_mb):
+            raise ValidationError(self.__get_exception_message())
 
-def validate_first_name_length(first_name):
-    if len(first_name) < 2:
-        raise ValidationError(
-            {'first_name': f'Ensure this value has at least 2 characters (it has {len(first_name)}).'})
+    @staticmethod
+    def __megabytes_to_bytes(value):
+        return value * 1024 * 1024
 
-
-def validate_last_name(last_name):
-    if not last_name.isalpha():
-        raise ValidationError({
-            'last_name': 'Text must contain only letters!'})
-
-
-def validate_last_name_length(last_name):
-    if len(last_name) < 2:
-        raise ValidationError({
-            'last_name': f'Ensure this value has at least 2 characters (it has {len(last_name)}).'})
+    def __get_exception_message(self):
+        return f"Max file size is {self.max_size_in_mb:.2f} MB"
