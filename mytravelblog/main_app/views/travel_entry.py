@@ -25,6 +25,7 @@ class TravelEntryDetailsView(LoginRequiredMixin, generic_views.DetailView):
     model = TravelEntry
     template_name = 'main_app/travel_entry/travel_entry.details.html'
     context_object_name = 'travel_entry'
+    ordering = ('-publish_date_time',)
 
 
 class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):

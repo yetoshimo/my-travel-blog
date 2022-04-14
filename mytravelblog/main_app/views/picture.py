@@ -30,7 +30,7 @@ class TravelPicturesView(LoginRequiredMixin, generic_views.ListView):
     model = TravelPicture
     template_name = 'main_app/generic/travel_pictures.html'
     context_object_name = 'travel_pictures'
-    ordering = ('located_city', 'uploaded_on',)
+    ordering = ('located_city', '-uploaded_on',)
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).all()

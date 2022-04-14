@@ -54,10 +54,16 @@ class HotelRegistrationForm(forms.ModelForm, BootstrapFormMixin):
 
 
 class HotelEditForm(forms.ModelForm, BootstrapFormMixin):
-    def __init__(self, located_city, *args, **kwargs):
+    def __init__(self, user, located_city, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         self._init_bootstrap_form_controls()
         self.fields['located_city'].queryset = located_city
+
+    def clean(self):
+        cleaned_data = super().clean()
+        _validate_hotel_name(self.user, self.cleaned_data['hotel_name'], self.cleaned_data['located_city'])
+        return cleaned_data
 
     class Meta:
         model = VisitedHotel

@@ -37,11 +37,6 @@ class TravelPictureRegistrationForm(forms.ModelForm, BootstrapFormMixin):
                     'placeholder': 'Enter title',
                 },
             ),
-            'travel_picture': forms.URLInput(
-                attrs={
-                    'placeholder': 'Enter picture URL',
-                },
-            ),
         }
 
 

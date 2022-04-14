@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cloudinary %}
 {% load static %}
 {% block page_content %}
 
@@ -10,10 +11,9 @@
             <div class="row">
                 <div class="col-sm-6 text-center">
                     {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}"
-                             alt="Profile Picture"
-                             class="img-thumbnail"
-                             style="max-width: 300px; max-height: 300px">
+                        <a href="{{ profile.profile_picture.url }}" class="thumbnail">
+                            {% cloudinary profile.profile_picture crop='scale' %}
+                        </a>
                     {% else %}
                         <img src="{% static 'default_files/default_profile_picture.png' %}"
                              alt="Default Profile Picture"

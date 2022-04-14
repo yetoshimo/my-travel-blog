@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cloudinary %}
 {% load static %}
 {% block page_content %}
 
@@ -14,9 +15,10 @@
             <br>
             <p>Visited Hotel: {{ travel_entry.visited_hotel.hotel_name }}</p>
             <br>
-            {% if travel_entry.travel_picture.travel_picture %}
-                <img src="{{ travel_entry.travel_picture.travel_picture }}" class="thumbnail img-responsive"
-                     alt="Travel Picture">
+            {% if travel_entry.travel_picture %}
+                <a href="{{ travel_entry.travel_picture.travel_picture.url }}" class="thumbnail">
+                    {% cloudinary travel_entry.travel_picture.travel_picture crop='scale' %}
+                </a>
             {% else %}
                 <img src="{% static 'default_files/default_world_picture.png' %}"
                      alt="Default Travel Picture"

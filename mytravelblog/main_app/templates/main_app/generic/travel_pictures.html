@@ -1,17 +1,17 @@
 {% extends 'base_visited.html' %}
+{% load cloudinary %}
 {% load static %}
 {% block panel_heading_details %}
     <h3>{{ item.title }}</h3>
     {% if item.travel_picture %}
-        <img src="{{ item.travel_picture }}"
-             alt="Travel Picture"
-             class="img-responsive img-thumbnail"
-             style="max-width: 75%">
+        <a href="{{ item.travel_picture.url }}" class="img-thumbnail">
+            {% cloudinary item.travel_picture width=300 height=300 crop='scale' %}
+        </a>
     {% else %}
         <img src="{% static 'default_files/default_world_picture.png' %}"
              alt="Default Travel Picture"
              class="img-responsive img-thumbnail"
-        style="max-width: 75%">
+             style="max-width: 75%">
     {% endif %}
     <h4>{{ item.located_city.city_name }}</h4>
     <h4>{{ item.located_city.country_name }}</h4>

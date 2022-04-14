@@ -51,6 +51,7 @@ class EditVisitedHotelView(LoginRequiredMixin, generic_views.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         kwargs['located_city'] = VisitedCity.objects.filter(user=self.request.user).all()
         return kwargs
 

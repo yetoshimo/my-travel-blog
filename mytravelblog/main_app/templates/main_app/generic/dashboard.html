@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cloudinary %}
 {% block page_content %}
 
     <div class="panel panel-info center-block">
@@ -11,8 +12,9 @@
                 {% endif %}
             </h3>
         </div>
+        <br>
         {% if travel_entries %}
-            <div class="container-fluid">
+            <div class="panel-heading container-fluid" style="text-align: center">
                 <div class="row">
                     {% for travel_entry in travel_entries %}
                         <div class="col-sm-4">
@@ -20,27 +22,34 @@
                                class="btn btn btn-default btn-md">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 {{ travel_entry.title }}
+                                <br>
+                                <br>
+                                {% cloudinary travel_entry.travel_picture.travel_picture width=100 height=100 crop='scale' %}
                             </a>
                         </div>
+                        {% if forloop.counter|divisibleby:'3' %}
+                            </div>
+                            <div class="row">
+                        {% endif %}
                     {% endfor %}
-                </div>
+                    </div>
             </div>
         {% endif %}
         {% if cities or hotels or travel_pictures %}
-            <div class="panel-body">
+            <div class="panel-body" style="text-align: center">
                 <div class="row">
                     {% if cities %}
-                        <div class="col-sm">
+                        <div class="col-sm-4">
                             <a href="{% url 'cities view' %}" class="btn btn-primary">Show Visited Cities</a>
                         </div>
                     {% endif %}
                     {% if hotels %}
-                        <div class="col-sm">
+                        <div class="col-sm-4">
                             <a href="{% url 'hotels view' %}" class="btn btn-primary">Show Visited Hotels</a>
                         </div>
                     {% endif %}
                     {% if travel_pictures %}
-                        <div class="col-sm">
+                        <div class="col-sm-4">
                             <a href="{% url 'travel pictures view' %}" class="btn btn-primary">Show Travel Pictures</a>
                         </div>
                     {% endif %}

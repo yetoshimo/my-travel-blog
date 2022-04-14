@@ -1,6 +1,9 @@
+from cloudinary import models as cloudinary_models
 from django.contrib.auth import get_user_model
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MinLengthValidator
 from django.db import models
+
+from mytravelblog.common.validators import ImageSizeInMBValidator
 
 UserModel = get_user_model()
 
@@ -111,17 +114,20 @@ class TravelPicture(models.Model):
         unique=True,
     )
 
-    travel_picture = models.URLField(
-        validators=(
-            MaxLengthValidator(URL_FIELD_MAX_LENGTH),
-        ),
+    travel_picture = cloudinary_models.CloudinaryField(
         null=True,
         blank=True,
+        verbose_name='Travel Picture',
+        use_filename=True,
+        validators=(
+            ImageSizeInMBValidator(3),
+        )
     )
 
     located_city = models.ForeignKey(
         VisitedCity,
         on_delete=models.CASCADE,
+        verbose_name='Located City',
     )
 
     user = models.ForeignKey(
@@ -139,6 +145,8 @@ class TravelPicture(models.Model):
     class Meta:
         verbose_name = 'Travel Picture'
         verbose_name_plural = 'Travel Pictures'
+
+        ordering = ('-uploaded_on',)
 
 
 class TravelEntry(models.Model):
@@ -188,3 +196,5 @@ class TravelEntry(models.Model):
     class Meta:
         verbose_name = 'Travel Entry'
         verbose_name_plural = 'Travel Entries'
+
+        ordering = ('-publish_date_time',)

@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch import receiver
 
-from mytravelblog.accounts.validators import ImageSizeInMBValidator
+from mytravelblog.common.validators import ImageSizeInMBValidator
 
 """
 Ways to extend the User model

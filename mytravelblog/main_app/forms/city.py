@@ -6,14 +6,14 @@ from mytravelblog.main_app.models import VisitedCity
 
 
 def _validate_city_name(user, city_name, country_name):
-    __city_name = city_name.title()
-    __country_name = country_name.title()
+    _city_name = city_name.title()
+    _country_name = country_name.title()
     if VisitedCity.objects.filter(user=user,
-                                  city_name=__city_name,
-                                  country_name=__country_name).exists():
-        raise ValidationError(f'{__city_name} '
-                              f'in {__country_name} already exists!')
-    return __city_name, __country_name
+                                  city_name=_city_name,
+                                  country_name=_country_name).exists():
+        raise ValidationError(f'{_city_name} '
+                              f'in {_country_name} already exists!')
+    return _city_name, _country_name
 
 
 class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
