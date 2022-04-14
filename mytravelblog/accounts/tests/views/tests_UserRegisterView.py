@@ -34,8 +34,13 @@ class UserRegisterViewTests(django_tests.TestCase):
                 'password2': self.password2,
             }
         )
-        self.assertEqual(HTTPStatus.FOUND, response.status_code)
-        self.assertRedirects(response, reverse('show dashboard'))
+
+        self.assertRedirects(response,
+                             reverse('show dashboard'),
+                             status_code=HTTPStatus.FOUND,
+                             target_status_code=HTTPStatus.OK)
+
+        self.assertIn('sessionid', response.cookies.keys())
         self.assertIn('_auth_user_id', self.client.session)
         users = UserModel.objects.all()
         self.assertEqual(1, users.count())

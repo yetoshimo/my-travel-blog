@@ -69,6 +69,10 @@ def create_or_save_user_profile(sender, instance, created, **kwargs):
 
 @receiver(signals.post_delete, sender=Profile)
 def delete_profile_user(sender, instance, **kwargs):
+    def __remove_cloudinary_image(image):
+        cloudinary.uploader.destroy(image.public_id, invalidate=True, )
+
     instance.user.delete()
+
     if instance.profile_picture:
-        cloudinary.uploader.destroy(instance.profile_picture.public_id, invalidate=True, )
+        __remove_cloudinary_image(instance.profile_picture)

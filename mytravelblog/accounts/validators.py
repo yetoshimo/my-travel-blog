@@ -8,9 +8,10 @@ class ImageSizeInMBValidator:
         self.max_size_in_mb = max_size_in_mb
 
     def __call__(self, value, *args, **kwargs):
-        filesize = value.file.size
-        if filesize > self.__megabytes_to_bytes(self.max_size_in_mb):
-            raise ValidationError(self.__get_exception_message())
+        if value:
+            filesize = value.size
+            if filesize > self.__megabytes_to_bytes(self.max_size_in_mb):
+                raise ValidationError(self.__get_exception_message())
 
     @staticmethod
     def __megabytes_to_bytes(value):

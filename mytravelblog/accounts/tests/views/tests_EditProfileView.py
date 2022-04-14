@@ -4,8 +4,6 @@ from django import test as django_tests
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from mytravelblog.accounts.models import Profile
-
 UserModel = get_user_model()
 
 
