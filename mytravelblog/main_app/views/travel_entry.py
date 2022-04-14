@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
@@ -19,6 +20,12 @@ class TravelEntryRegisterView(LoginRequiredMixin, generic_views.CreateView):
         kwargs['visited_hotel'] = VisitedHotel.objects.filter(user=self.request.user).all()
         kwargs['travel_picture'] = TravelPicture.objects.filter(user=self.request.user).all()
         return kwargs
+
+    def dispatch(self, request, *args, **kwargs):
+        result = VisitedCity.objects.filter(user=self.request.user).all()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('register city')
 
 
 class TravelEntryDetailsView(LoginRequiredMixin, generic_views.DetailView):

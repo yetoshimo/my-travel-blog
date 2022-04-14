@@ -6,12 +6,12 @@ from mytravelblog.main_app.models import VisitedHotel
 
 
 def _validate_hotel_name(user, hotel_name, located_city):
-    __hotel_name = hotel_name
-    __located_city = located_city
+    _hotel_name = hotel_name
+    _located_city = located_city
     if VisitedHotel.objects.filter(user=user,
-                                   hotel_name=__hotel_name,
-                                   located_city=__located_city).exists():
-        raise ValidationError(f'{__hotel_name} in {__located_city} already exists!')
+                                   hotel_name=_hotel_name,
+                                   located_city=_located_city).exists():
+        raise ValidationError(f'{_hotel_name} in {_located_city} already exists!')
 
 
 class HotelRegistrationForm(forms.ModelForm, BootstrapFormMixin):

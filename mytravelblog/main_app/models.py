@@ -109,11 +109,6 @@ class TravelPicture(models.Model):
     URL_FIELD_MAX_LENGTH = 200
     TITLE_MAX_LENGTH = 64
 
-    title = models.CharField(
-        max_length=TITLE_MAX_LENGTH,
-        unique=True,
-    )
-
     travel_picture = cloudinary_models.CloudinaryField(
         null=True,
         blank=True,
@@ -122,6 +117,11 @@ class TravelPicture(models.Model):
         validators=(
             ImageSizeInMBValidator(3),
         )
+    )
+
+    title = models.CharField(
+        max_length=TITLE_MAX_LENGTH,
+        unique=True,
     )
 
     located_city = models.ForeignKey(
@@ -169,6 +169,7 @@ class TravelEntry(models.Model):
     visited_city = models.ForeignKey(
         VisitedCity,
         on_delete=models.CASCADE,
+        verbose_name='Visited City',
     )
 
     visited_hotel = models.ForeignKey(
@@ -176,6 +177,7 @@ class TravelEntry(models.Model):
         on_delete=models.DO_NOTHING,
         null=True,
         blank=True,
+        verbose_name='Visited Hotel',
     )
 
     travel_picture = models.ForeignKey(
@@ -183,6 +185,7 @@ class TravelEntry(models.Model):
         on_delete=models.DO_NOTHING,
         null=True,
         blank=True,
+        verbose_name='Travel Picture',
     )
 
     user = models.ForeignKey(

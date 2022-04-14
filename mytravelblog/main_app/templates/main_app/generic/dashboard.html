@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load cloudinary %}
 {% block page_content %}
 
@@ -12,8 +13,8 @@
                 {% endif %}
             </h3>
         </div>
-        <br>
         {% if travel_entries %}
+            <br>
             <div class="panel-heading container-fluid" style="text-align: center">
                 <div class="row">
                     {% for travel_entry in travel_entries %}
@@ -24,7 +25,14 @@
                                 {{ travel_entry.title }}
                                 <br>
                                 <br>
-                                {% cloudinary travel_entry.travel_picture.travel_picture width=100 height=100 crop='scale' %}
+                                {% if travel_entry.travel_picture.travel_picture %}
+                                    {% cloudinary travel_entry.travel_picture.travel_picture width=100 height=100 crop='scale' %}
+                                {% else %}
+                                    <img src="{% static 'default_files/default_world_picture.png' %}"
+                                         alt="Default Travel Picture"
+                                         class="img-responsive img-thumbnail"
+                                         style="max-width: 75%">
+                                {% endif %}
                             </a>
                         </div>
                         {% if forloop.counter|divisibleby:'3' %}
