@@ -58,5 +58,5 @@ class TravelPictureRegistrationFormTests(django_tests.TestCase):
         }
         travel_picture_form = TravelPictureRegistrationForm(user=self.user, data=data, located_city=self.cities)
         self.assertFalse(travel_picture_form.is_valid())
-        self.assertEqual('Travel Picture with this Title already exists.',
+        self.assertEqual(f'Picture with title "{self.title}" already exists!',
                          travel_picture_form.errors['title'][0])

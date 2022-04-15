@@ -55,6 +55,12 @@ class EditVisitedHotelView(LoginRequiredMixin, generic_views.UpdateView):
         kwargs['located_city'] = VisitedCity.objects.filter(user=self.request.user).all()
         return kwargs
 
+    def dispatch(self, request, *args, **kwargs):
+        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('hotels view')
+
 
 class DeleteVisitedHotelView(LoginRequiredMixin, generic_views.DeleteView):
     model = VisitedHotel
@@ -62,3 +68,9 @@ class DeleteVisitedHotelView(LoginRequiredMixin, generic_views.DeleteView):
     success_url = reverse_lazy('hotels view')
     form_class = HotelDeleteForm
     context_object_name = 'hotel'
+
+    def dispatch(self, request, *args, **kwargs):
+        result = VisitedHotel.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('hotels view')

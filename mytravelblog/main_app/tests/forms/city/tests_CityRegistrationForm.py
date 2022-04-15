@@ -43,4 +43,4 @@ class CityRegistrationFormTests(django_tests.TestCase):
         city_form = CityRegistrationForm(data=data, user=self.user)
         self.assertFalse(city_form.is_valid())
         self.assertEqual(f'{self.city_name.title()} in {self.country_name.title()} already exists!',
-                         city_form.errors['__all__'][0])
+                         city_form.errors['city_name'][0])

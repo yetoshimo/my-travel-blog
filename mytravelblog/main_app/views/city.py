@@ -52,6 +52,12 @@ class EditVisitedCityView(LoginRequiredMixin, generic_views.UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def dispatch(self, request, *args, **kwargs):
+        result = VisitedCity.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('cities view')
+
 
 class DeleteVisitedCityView(LoginRequiredMixin, generic_views.DeleteView):
     model = VisitedCity
@@ -59,3 +65,9 @@ class DeleteVisitedCityView(LoginRequiredMixin, generic_views.DeleteView):
     success_url = reverse_lazy('cities view')
     form_class = CityDeleteForm
     context_object_name = 'city'
+
+    def dispatch(self, request, *args, **kwargs):
+        result = VisitedCity.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('cities view')

@@ -11,9 +11,9 @@ def _validate_city_name(user, city_name, country_name):
     if VisitedCity.objects.filter(user=user,
                                   city_name=_city_name,
                                   country_name=_country_name).exists():
-        raise ValidationError(f'{_city_name} '
-                              f'in {_country_name} already exists!')
-    return _city_name, _country_name
+        raise ValidationError({
+            'city_name': f'{_city_name} in {_country_name} already exists!'
+        })
 
 
 class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
@@ -24,9 +24,9 @@ class CityRegistrationForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        self.cleaned_data['city_name'], \
-        self.cleaned_data['country_name'] = \
-            _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
+        _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
+        cleaned_data['city_name'] = cleaned_data['city_name'].title()
+        cleaned_data['country_name'] = cleaned_data['country_name'].title()
         return cleaned_data
 
     def save(self, commit=True):
@@ -68,9 +68,9 @@ class CityEditForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        self.cleaned_data['city_name'], \
-        self.cleaned_data['country_name'] = \
-            _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
+        _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
+        cleaned_data['city_name'] = cleaned_data['city_name'].title()
+        cleaned_data['country_name'] = cleaned_data['country_name'].title()
         return cleaned_data
 
     class Meta:

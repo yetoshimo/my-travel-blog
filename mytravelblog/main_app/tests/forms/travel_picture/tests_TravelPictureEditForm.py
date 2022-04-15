@@ -44,7 +44,10 @@ class TravelPictureEditFormTests(django_tests.TestCase):
             'located_city': self.located_city,
         }
 
-        travel_picture_edit_form = TravelPictureEditForm(instance=travel_picture, data=data, located_city=self.cities)
+        travel_picture_edit_form = TravelPictureEditForm(instance=travel_picture,
+                                                         data=data,
+                                                         located_city=self.cities,
+                                                         user=self.user)
         self.assertTrue(travel_picture_edit_form.is_valid())
         travel_picture_edit_form.save()
         self.assertEqual(self.title_two, travel_picture.title)
@@ -69,8 +72,10 @@ class TravelPictureEditFormTests(django_tests.TestCase):
             'title': self.title,
             'located_city': self.located_city,
         }
-        travel_picture_edit_form = TravelPictureEditForm(instance=travel_picture_two, data=data,
-                                                         located_city=self.cities)
+        travel_picture_edit_form = TravelPictureEditForm(instance=travel_picture_two,
+                                                         data=data,
+                                                         located_city=self.cities,
+                                                         user=self.user)
         self.assertFalse(travel_picture_edit_form.is_valid())
-        self.assertEqual('Travel Picture with this Title already exists.',
+        self.assertEqual(f'Picture with title "{self.title}" already exists!',
                          travel_picture_edit_form.errors['title'][0])

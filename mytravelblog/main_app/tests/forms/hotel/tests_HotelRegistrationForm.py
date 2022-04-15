@@ -62,4 +62,4 @@ class HotelRegistrationFormTests(django_tests.TestCase):
         hotel_form = HotelRegistrationForm(user=self.user, data=data, located_city=self.cities)
         self.assertFalse(hotel_form.is_valid())
         self.assertEqual(f'{self.hotel_name} in {self.located_city} already exists!',
-                         hotel_form.errors['__all__'][0])
+                         hotel_form.errors['hotel_name'][0])

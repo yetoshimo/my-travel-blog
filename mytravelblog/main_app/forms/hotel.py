@@ -11,7 +11,9 @@ def _validate_hotel_name(user, hotel_name, located_city):
     if VisitedHotel.objects.filter(user=user,
                                    hotel_name=_hotel_name,
                                    located_city=_located_city).exists():
-        raise ValidationError(f'{_hotel_name} in {_located_city} already exists!')
+        raise ValidationError({
+            'hotel_name': f'{_hotel_name} in {_located_city} already exists!'
+        })
 
 
 class HotelRegistrationForm(forms.ModelForm, BootstrapFormMixin):

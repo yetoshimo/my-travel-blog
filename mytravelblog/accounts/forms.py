@@ -38,8 +38,6 @@ class CreateProfileForm(UserCreationForm, BootstrapFormMixin):
     LAST_NAME_MAX_LENGTH = 32
     LAST_NAME_MIN_LENGTH = 2
 
-    URL_FIELD_MAX_LENGTH = 200
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()

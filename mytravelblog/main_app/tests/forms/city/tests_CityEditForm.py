@@ -57,4 +57,4 @@ class CityEditFormFormTests(django_tests.TestCase):
         city_edit_form = CityEditForm(instance=visited_city_two, data=data, user=self.user)
         self.assertFalse(city_edit_form.is_valid())
         self.assertEqual(f'{self.city_name.title()} in {self.country_name.title()} already exists!',
-                         city_edit_form.errors['__all__'][0])
+                         city_edit_form.errors['city_name'][0])

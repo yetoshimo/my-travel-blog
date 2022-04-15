@@ -43,7 +43,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li>
-                        <a href="{% url 'profile details' request.user.pk %}">Welcome, {{ request.user.username }}
+                        <a href="{% url 'profile details' request.user.pk %}">Welcome, <b>{{ request.user.username }}</b>
                             !</a></li>
                     <li>
                         <a href="{% url 'profile details' request.user.pk %}" style="padding: 0">

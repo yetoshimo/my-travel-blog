@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -51,8 +52,30 @@ class EditTravelPictureView(LoginRequiredMixin, generic_views.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         kwargs['located_city'] = VisitedCity.objects.filter(user=self.request.user).all()
         return kwargs
+
+    def form_valid(self, form, *args, **kwargs):
+        if 'travel_picture' in form.changed_data:
+            # GET THE EXISTING OBJECT ( NOT IN-MEMORY )
+            tp_to_update = TravelPicture.objects.get(pk=self.object.pk)
+            if form.cleaned_data['travel_picture'] and tp_to_update.travel_picture:
+                # IF UPDATED REMOVE THE EXISTING ONE
+                cloudinary.uploader.destroy(tp_to_update.travel_picture.public_id,
+                                            invalidate=True, )
+            elif not self.object.travel_picture:
+                # IF CLEARED REMOVE THE EXISTING ONE
+                cloudinary.uploader.destroy(tp_to_update.travel_picture.public_id,
+                                            invalidate=True, )
+        result = super().form_valid(form)
+        return result
+
+    def dispatch(self, request, *args, **kwargs):
+        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('travel pictures view')
 
 
 class DeleteTravelPictureView(LoginRequiredMixin, generic_views.DeleteView):
@@ -61,3 +84,9 @@ class DeleteTravelPictureView(LoginRequiredMixin, generic_views.DeleteView):
     success_url = reverse_lazy('travel pictures view')
     form_class = TravelPictureDeleteForm
     context_object_name = 'travel_picture'
+
+    def dispatch(self, request, *args, **kwargs):
+        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('travel pictures view')

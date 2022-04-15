@@ -34,6 +34,15 @@ class TravelEntryDetailsView(LoginRequiredMixin, generic_views.DetailView):
     context_object_name = 'travel_entry'
     ordering = ('-publish_date_time',)
 
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user).all()
+
+    def dispatch(self, request, *args, **kwargs):
+        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('show dashboard')
+
 
 class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):
     model = TravelEntry
@@ -52,6 +61,12 @@ class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):
     def get_success_url(self):
         return reverse_lazy('travel entry details', kwargs={'pk': self.object.id})
 
+    def dispatch(self, request, *args, **kwargs):
+        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('show dashboard')
+
 
 class DeleteTravelEntryView(LoginRequiredMixin, generic_views.DeleteView):
     model = TravelEntry
@@ -59,3 +74,9 @@ class DeleteTravelEntryView(LoginRequiredMixin, generic_views.DeleteView):
     success_url = reverse_lazy('show dashboard')
     form_class = TravelEntryDeleteForm
     context_object_name = 'travel_entry'
+
+    def dispatch(self, request, *args, **kwargs):
+        result = TravelEntry.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
+        if result:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('show dashboard')

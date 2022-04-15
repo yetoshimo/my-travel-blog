@@ -106,7 +106,6 @@ class VisitedHotel(models.Model):
 
 
 class TravelPicture(models.Model):
-    URL_FIELD_MAX_LENGTH = 200
     TITLE_MAX_LENGTH = 64
 
     travel_picture = cloudinary_models.CloudinaryField(
@@ -121,7 +120,6 @@ class TravelPicture(models.Model):
 
     title = models.CharField(
         max_length=TITLE_MAX_LENGTH,
-        unique=True,
     )
 
     located_city = models.ForeignKey(
@@ -147,6 +145,11 @@ class TravelPicture(models.Model):
         verbose_name_plural = 'Travel Pictures'
 
         ordering = ('-uploaded_on',)
+
+        unique_together = (
+            'user',
+            'title',
+        )
 
 
 class TravelEntry(models.Model):

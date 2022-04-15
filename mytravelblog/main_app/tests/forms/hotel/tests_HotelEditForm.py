@@ -78,4 +78,4 @@ class HotelEditFormTests(django_tests.TestCase):
         hotel_edit_form = HotelEditForm(instance=visited_hotel_two, data=data, user=self.user, located_city=self.cities)
         self.assertFalse(hotel_edit_form.is_valid())
         self.assertEqual(f'{self.hotel_name} in {self.located_city} already exists!',
-                         hotel_edit_form.errors['__all__'][0])
+                         hotel_edit_form.errors['hotel_name'][0])

@@ -12,7 +12,7 @@ urlpatterns = (
     path('show-cities/', VisitedCitiesView.as_view(), name='cities view'),
     path('show-hotels/', VisitedHotelsView.as_view(), name='hotels view'),
     path('show-travel-pictures/', TravelPicturesView.as_view(), name='travel pictures view'),
-    path('travel-entry-view/<int:pk>', TravelEntryDetailsView.as_view(), name='travel entry details'),
+    path('travel-entry-view/<int:pk>/', TravelEntryDetailsView.as_view(), name='travel entry details'),
 
     path('register-city/', CityRegisterView.as_view(), name='register city'),
     path('edit-city/<int:pk>/', EditVisitedCityView.as_view(), name='city edit'),

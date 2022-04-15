@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from django.contrib.auth import views as auth_views, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -61,6 +62,11 @@ class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):
         return reverse_lazy('profile details', kwargs={'pk': self.request.user.pk})
 
     def form_valid(self, form, *args, **kwargs):
+        if 'profile_picture' in form.changed_data:
+            if form.cleaned_data['profile_picture'] and self.request.user.profile.profile_picture:
+                cloudinary.uploader.destroy(self.request.user.profile.profile_picture.public_id, invalidate=True, )
+            elif not form.cleaned_data['profile_picture']:
+                cloudinary.uploader.destroy(self.request.user.profile.profile_picture.public_id, invalidate=True, )
         result = super().form_valid(form)
         user = self.object.user
         user.first_name = form.cleaned_data['first_name']

@@ -8,7 +8,7 @@ class ImageSizeInMBValidator:
         self.max_size_in_mb = max_size_in_mb
 
     def __call__(self, value, *args, **kwargs):
-        if value:
+        if value and not hasattr(value, 'url'):
             filesize = value.size
             if filesize > self.__megabytes_to_bytes(self.max_size_in_mb):
                 raise ValidationError(self.__get_exception_message())
