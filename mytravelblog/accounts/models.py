@@ -57,6 +57,10 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user}'s Profile"
 
+    def save(self, *args, **kwargs):
+        self.current_country = self.current_country.title()
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'

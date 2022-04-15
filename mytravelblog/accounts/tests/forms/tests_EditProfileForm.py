@@ -16,6 +16,7 @@ class EditProfileFormTests(django_tests.TestCase):
         self.email = 'testuser@email.com'
         self.first_name_update = 'testuser-firstname-update'
         self.profile_picture = 'default_profile_picture.png'
+        self.current_country = 'bulgaria'
 
         self.user = UserModel.objects.create_user(
             username=self.username,
@@ -35,3 +36,10 @@ class EditProfileFormTests(django_tests.TestCase):
         self.assertEqual(self.first_name, edit_profile_form.fields['first_name'].initial)
         self.assertEqual(self.last_name, edit_profile_form.fields['last_name'].initial)
         self.assertEqual(self.email, edit_profile_form.fields['email'].initial)
+
+    def test_edit_profile_save_country_with_title(self):
+        data = {
+            'current_country': self.current_country
+        }
+        edit_profile_form = EditProfileForm(data=data, user=self.user)
+        self.assertEqual(self.current_country.title(), edit_profile_form.current_country)
