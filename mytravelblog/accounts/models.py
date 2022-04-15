@@ -58,7 +58,8 @@ class Profile(models.Model):
         return f"{self.user}'s Profile"
 
     def save(self, *args, **kwargs):
-        self.current_country = self.current_country.title()
+        if self.current_country:
+            self.current_country = self.current_country.title()
         super().save(*args, **kwargs)
 
     class Meta:
