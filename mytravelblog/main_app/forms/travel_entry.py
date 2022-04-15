@@ -1,6 +1,6 @@
 from django import forms
 
-from mytravelblog.accounts.helpers import BootstrapFormMixin
+from mytravelblog.common.helpers import BootstrapFormMixin
 from mytravelblog.main_app.models import TravelEntry
 
 

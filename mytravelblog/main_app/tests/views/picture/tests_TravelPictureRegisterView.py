@@ -122,11 +122,11 @@ class TravelPictureRegisterViewTests(django_tests.TestCase):
         data = {
             # 'travel_picture': self.travel_picture,
             'title': self.title,
-            'located_city': visited_city_other_user.pk,
+            'located_city': visited_city.pk,
         }
         response = self.client.post(reverse('register travel picture'),
                                     data=data,
                                     located_city=cities)
         self.assertEqual(HTTPStatus.OK, response.status_code)
-        self.assertEqual(f'Picture with title "{self.title}" already exists!',
+        self.assertEqual(f'Picture with title "{self.title}" in {visited_city} already exists!',
                          response.context_data['form'].errors['title'][0])

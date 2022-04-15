@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from mytravelblog.accounts.helpers import BootstrapFormMixin
+from mytravelblog.common.helpers import BootstrapFormMixin
 from mytravelblog.main_app.models import VisitedHotel
 
 
@@ -64,7 +64,8 @@ class HotelEditForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        _validate_hotel_name(self.user, self.cleaned_data['hotel_name'], self.cleaned_data['located_city'])
+        if 'hotel_name' in self.changed_data or 'located_city' in self.changed_data:
+            _validate_hotel_name(self.user, self.cleaned_data['hotel_name'], self.cleaned_data['located_city'])
         return cleaned_data
 
     class Meta:

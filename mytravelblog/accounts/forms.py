@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm, PasswordChangeForm
 
-from mytravelblog.accounts.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
+from mytravelblog.common.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
 from mytravelblog.accounts.models import Profile
 
 UserModel = get_user_model()

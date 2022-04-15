@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from mytravelblog.accounts.helpers import BootstrapFormMixin
+from mytravelblog.common.helpers import BootstrapFormMixin
 from mytravelblog.main_app.models import VisitedCity
 
 
@@ -68,7 +68,8 @@ class CityEditForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
+        if self.changed_data:
+            _validate_city_name(self.user, self.cleaned_data['city_name'], self.cleaned_data['country_name'])
         cleaned_data['city_name'] = cleaned_data['city_name'].title()
         cleaned_data['country_name'] = cleaned_data['country_name'].title()
         return cleaned_data

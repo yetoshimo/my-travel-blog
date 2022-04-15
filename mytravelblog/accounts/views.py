@@ -1,6 +1,7 @@
 import cloudinary.uploader
 from django.contrib.auth import views as auth_views, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
@@ -45,6 +46,12 @@ class UserProfileDetailsView(LoginRequiredMixin, generic_views.DetailView):
     model = Profile
     template_name = 'accounts/profile/profile_details.html'
     context_object_name = 'profile'
+
+    def dispatch(self, request, *args, **kwargs):
+        if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
+                request.user == Profile.objects.get(user_id=kwargs['pk']).user:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('profile details', self.request.user.id)
 
 
 class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):

@@ -108,13 +108,15 @@ class VisitedHotel(models.Model):
 class TravelPicture(models.Model):
     TITLE_MAX_LENGTH = 64
 
+    MAX_IMAGE_SIZE_IN_MB = 1
+
     travel_picture = cloudinary_models.CloudinaryField(
         null=True,
         blank=True,
         verbose_name='Travel Picture',
         use_filename=True,
         validators=(
-            ImageSizeInMBValidator(3),
+            ImageSizeInMBValidator(MAX_IMAGE_SIZE_IN_MB),
         )
     )
 
@@ -148,7 +150,8 @@ class TravelPicture(models.Model):
 
         unique_together = (
             'user',
-            'title',
+            'located_city',
+            'travel_picture',
         )
 
 

@@ -77,5 +77,5 @@ class TravelPictureEditFormTests(django_tests.TestCase):
                                                          located_city=self.cities,
                                                          user=self.user)
         self.assertFalse(travel_picture_edit_form.is_valid())
-        self.assertEqual(f'Picture with title "{self.title}" already exists!',
+        self.assertEqual(f'Picture with title "{self.title}" in {self.located_city} already exists!',
                          travel_picture_edit_form.errors['title'][0])

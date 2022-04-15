@@ -27,7 +27,7 @@ class TravelPictureRegistrationFormTests(django_tests.TestCase):
 
         self.cities = VisitedCity.objects.filter(user=self.user).all()
 
-    def test_travel_picture_form_correctly_saves_with_valid_data(self):
+    def test_travel_picture_registration_form_correctly_saves_with_valid_data(self):
         data = {
             'travel_picture': self.travel_picture,
             'title': self.title,
@@ -42,7 +42,7 @@ class TravelPictureRegistrationFormTests(django_tests.TestCase):
         self.assertEqual(self.located_city, travel_picture_form.cleaned_data['located_city'])
         self.assertEqual(1, TravelPicture.objects.count())
 
-    def test_travel_picture_form_cannot_save_duplicate_name(self):
+    def test_travel_picture_registration_form_cannot_save_duplicate_name(self):
         travel_picture = TravelPicture.objects.create(
             travel_picture=self.travel_picture,
             title=self.title,
@@ -58,5 +58,5 @@ class TravelPictureRegistrationFormTests(django_tests.TestCase):
         }
         travel_picture_form = TravelPictureRegistrationForm(user=self.user, data=data, located_city=self.cities)
         self.assertFalse(travel_picture_form.is_valid())
-        self.assertEqual(f'Picture with title "{self.title}" already exists!',
+        self.assertEqual(f'Picture with title "{self.title}" in {self.located_city} already exists!',
                          travel_picture_form.errors['title'][0])

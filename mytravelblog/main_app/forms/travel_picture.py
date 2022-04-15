@@ -1,17 +1,19 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from mytravelblog.accounts.helpers import BootstrapFormMixin
+from mytravelblog.common.helpers import BootstrapFormMixin
 from mytravelblog.main_app.models import TravelPicture
 
 
-def _validate_travel_picture_name(user, title):
+def _validate_travel_picture_name(user, title, located_city):
     _title = title
+    _located_city = located_city
     if TravelPicture.objects.filter(user=user,
                                     title=_title,
+                                    located_city=_located_city,
                                     ).exists():
         raise ValidationError({
-            'title': f'Picture with title "{_title}" already exists!'
+            'title': f'Picture with title "{_title}" in {_located_city} already exists!'
         })
 
 
@@ -24,7 +26,7 @@ class TravelPictureRegistrationForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        _validate_travel_picture_name(self.user, self.cleaned_data['title'])
+        _validate_travel_picture_name(self.user, self.cleaned_data['title'], self.cleaned_data['located_city'])
         return cleaned_data
 
     def save(self, commit=True):
@@ -65,15 +67,16 @@ class TravelPictureEditForm(forms.ModelForm, BootstrapFormMixin):
 
     def clean(self):
         cleaned_data = super().clean()
-        _validate_travel_picture_name(self.user, self.cleaned_data['title'])
+        if 'title' in self.changed_data or 'located_city' in self.changed_data:
+            _validate_travel_picture_name(self.user, self.cleaned_data['title'], self.cleaned_data['located_city'])
         return cleaned_data
 
     class Meta:
         model = TravelPicture
 
         fields = (
-            'title',
             'travel_picture',
+            'title',
             'located_city',
         )
 

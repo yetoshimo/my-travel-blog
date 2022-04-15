@@ -20,6 +20,8 @@ class Profile(models.Model):
     COUNTRIES_MAX_LENGTH = 50
     COUNTRIES_MIN_LENGTH = 4
 
+    MAX_IMAGE_SIZE_IN_MB = 1
+
     user = models.OneToOneField(
         UserModel,
         on_delete=models.CASCADE,
@@ -32,7 +34,7 @@ class Profile(models.Model):
         verbose_name='Profile Picture',
         use_filename=True,
         validators=(
-            ImageSizeInMBValidator(3),
+            ImageSizeInMBValidator(MAX_IMAGE_SIZE_IN_MB),
         )
     )
 
