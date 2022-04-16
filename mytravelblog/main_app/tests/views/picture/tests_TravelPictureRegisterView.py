@@ -150,7 +150,7 @@ class TravelPictureRegisterViewTests(django_tests.TestCase):
                 'travel_picture': SimpleUploadedFile(
                     name='invalid_test_file.txt',
                     content=invalid_picture.read(),
-                    content_type='image/png',
+                    content_type='plain/txt',
                 ),
                 'located_city': visited_city.pk,
             }

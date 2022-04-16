@@ -154,9 +154,9 @@ class EditProfileViewTests(django_tests.TestCase):
                                'invalid_test_file.txt'), 'rb') as invalid_picture:
             data = {
                 'profile_picture': SimpleUploadedFile(
-                    name='default_big_file.JPG',
+                    name='invalid_test_file.txt',
                     content=invalid_picture.read(),
-                    content_type='image/png',
+                    content_type='text/plain',
                 ),
             }
             response = self.client.post(reverse('profile edit', kwargs={'pk': self.user.id}), data=data, user=self.user)

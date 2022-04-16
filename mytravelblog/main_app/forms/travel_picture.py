@@ -28,7 +28,8 @@ class TravelPictureRegistrationForm(forms.ModelForm, BootstrapFormMixin):
     def clean(self):
         cleaned_data = super().clean()
         _validate_travel_picture_name(self.user, self.cleaned_data['title'], self.cleaned_data['located_city'])
-        validate_file_content_type('travel_picture', self.cleaned_data['travel_picture'].content_type)
+        if self.cleaned_data['travel_picture']:
+            validate_file_content_type('travel_picture', self.cleaned_data['travel_picture'].content_type)
         return cleaned_data
 
     def save(self, commit=True):

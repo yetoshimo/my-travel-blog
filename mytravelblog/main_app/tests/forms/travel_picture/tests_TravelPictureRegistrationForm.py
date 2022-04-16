@@ -29,7 +29,7 @@ class TravelPictureRegistrationFormTests(django_tests.TestCase):
 
     def test_travel_picture_registration_form_correctly_saves_with_valid_data(self):
         data = {
-            'travel_picture': self.travel_picture,
+            # 'travel_picture': self.travel_picture,
             'title': self.title,
             'located_city': self.located_city,
         }

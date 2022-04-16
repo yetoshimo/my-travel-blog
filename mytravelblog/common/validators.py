@@ -22,7 +22,7 @@ class ImageSizeInMBValidator:
 
 
 def validate_file_content_type(field_name, file_content_type):
-    if file_content_type != 'image/jpeg':
+    if file_content_type != 'image/jpeg' and file_content_type != 'image/png':
         raise ValidationError({
             f'{field_name}': 'Please select an image file!'
         })
