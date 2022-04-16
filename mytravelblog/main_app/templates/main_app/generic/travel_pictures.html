@@ -5,7 +5,7 @@
     <h3>{{ item.title }}</h3>
     {% if item.travel_picture %}
         <a href="{{ item.travel_picture.url }}" class="img-thumbnail">
-            {% cloudinary item.travel_picture width=300 height=300 crop='scale' %}
+            {% cloudinary item.travel_picture width=300 height=300 crop='scale' gravity='auto' %}
         </a>
     {% else %}
         <img src="{% static 'default_files/default_world_picture.png' %}"
