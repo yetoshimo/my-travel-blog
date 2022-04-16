@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from mytravelblog.common.helpers import BootstrapFormMixin
+from mytravelblog.common.validators import validate_file_content_type
 from mytravelblog.main_app.models import TravelPicture
 
 
@@ -27,6 +28,7 @@ class TravelPictureRegistrationForm(forms.ModelForm, BootstrapFormMixin):
     def clean(self):
         cleaned_data = super().clean()
         _validate_travel_picture_name(self.user, self.cleaned_data['title'], self.cleaned_data['located_city'])
+        validate_file_content_type('travel_picture', self.cleaned_data['travel_picture'].content_type)
         return cleaned_data
 
     def save(self, commit=True):
@@ -69,6 +71,8 @@ class TravelPictureEditForm(forms.ModelForm, BootstrapFormMixin):
         cleaned_data = super().clean()
         if 'title' in self.changed_data or 'located_city' in self.changed_data:
             _validate_travel_picture_name(self.user, self.cleaned_data['title'], self.cleaned_data['located_city'])
+        if self.cleaned_data['travel_picture']:
+            validate_file_content_type('travel_picture', self.cleaned_data['travel_picture'].content_type)
         return cleaned_data
 
     class Meta:

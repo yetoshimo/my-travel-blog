@@ -19,3 +19,10 @@ class ImageSizeInMBValidator:
 
     def __get_exception_message(self):
         return f"Max file size is {self.max_size_in_mb:.2f} MB"
+
+
+def validate_file_content_type(field_name, file_content_type):
+    if file_content_type != 'image/jpeg':
+        raise ValidationError({
+            f'{field_name}': 'Please select an image file!'
+        })

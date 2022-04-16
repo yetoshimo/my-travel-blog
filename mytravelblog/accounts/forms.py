@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCre
 
 from mytravelblog.common.helpers import BootstrapFormMixin, BIRTH_YEAR_RANGE
 from mytravelblog.accounts.models import Profile
+from mytravelblog.common.validators import validate_file_content_type
 
 UserModel = get_user_model()
 
@@ -158,6 +159,12 @@ class EditProfileForm(forms.ModelForm, BootstrapFormMixin):
         ),
         required=False,
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.cleaned_data['profile_picture']:
+            validate_file_content_type('profile_picture', self.cleaned_data['profile_picture'].content_type)
+        return cleaned_data
 
     class Meta:
         model = Profile
