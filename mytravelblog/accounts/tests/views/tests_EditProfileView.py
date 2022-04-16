@@ -133,10 +133,10 @@ class EditProfileViewTests(django_tests.TestCase):
         with open(os.path.join(BASE_DIR,
                                'staticfiles',
                                'default_files',
-                               'default_big_file.JPG'), 'rb') as cloudinary_profile_picture:
+                               'default_big_file.jpg'), 'rb') as cloudinary_profile_picture:
             data = {
                 'profile_picture': SimpleUploadedFile(
-                    name='default_big_file.JPG',
+                    name='default_big_file.jpg',
                     content=cloudinary_profile_picture.read(),
                     content_type='image/png',
                 ),

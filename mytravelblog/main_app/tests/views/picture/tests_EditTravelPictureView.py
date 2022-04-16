@@ -270,11 +270,11 @@ class EditTravelPictureViewTests(django_tests.TestCase):
         with open(os.path.join(BASE_DIR,
                                'staticfiles',
                                'default_files',
-                               'default_big_file.JPG'), 'rb') as cloudinary_travel_picture:
+                               'default_big_file.jpg'), 'rb') as cloudinary_travel_picture:
             data = {
                 'title': self.title,
                 'travel_picture': SimpleUploadedFile(
-                    name='default_big_file.JPG',
+                    name='default_big_file.jpg',
                     content=cloudinary_travel_picture.read(),
                     content_type='image/png',
                 ),
