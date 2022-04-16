@@ -22,10 +22,12 @@ class TravelEntryRegisterView(LoginRequiredMixin, generic_views.CreateView):
         return kwargs
 
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedCity.objects.filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('register city')
+        if request.user.is_authenticated:
+            result = VisitedCity.objects.filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('register city')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class TravelEntryDetailsView(LoginRequiredMixin, generic_views.DetailView):
@@ -38,10 +40,12 @@ class TravelEntryDetailsView(LoginRequiredMixin, generic_views.DetailView):
         return super().get_queryset().filter(user=self.request.user).all()
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):
@@ -62,10 +66,12 @@ class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):
         return reverse_lazy('travel entry details', kwargs={'pk': self.object.id})
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeleteTravelEntryView(LoginRequiredMixin, generic_views.DeleteView):
@@ -76,7 +82,9 @@ class DeleteTravelEntryView(LoginRequiredMixin, generic_views.DeleteView):
     context_object_name = 'travel_entry'
 
     def dispatch(self, request, *args, **kwargs):
-        result = TravelEntry.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)

@@ -15,6 +15,7 @@ class ProfileTests(django_tests.TestCase):
         self.username = 'testuser'
         self.password1 = 'P@ssword1'
         self.password2 = 'P@ssword1'
+        self.current_country = 'bulgaria'
 
         self.user = UserModel.objects.create_user(
             username=self.username,
@@ -43,3 +44,8 @@ class ProfileTests(django_tests.TestCase):
         self.profile.delete()
         self.assertEqual(0, UserModel.objects.all().count())
         self.assertEqual(0, Profile.objects.all().count())
+
+    def test_edit_profile_save_country_with_title(self):
+        self.profile.current_country = self.current_country
+        self.profile.save()
+        self.assertEqual(self.current_country.title(), self.profile.current_country)

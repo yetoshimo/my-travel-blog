@@ -21,10 +21,12 @@ class TravelPictureRegisterView(LoginRequiredMixin, generic_views.CreateView):
         return kwargs
 
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedCity.objects.filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('register city')
+        if request.user.is_authenticated:
+            result = VisitedCity.objects.filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('register city')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class TravelPicturesView(LoginRequiredMixin, generic_views.ListView):
@@ -37,10 +39,12 @@ class TravelPicturesView(LoginRequiredMixin, generic_views.ListView):
         return super().get_queryset().filter(user=self.request.user).all()
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditTravelPictureView(LoginRequiredMixin, generic_views.UpdateView):
@@ -72,10 +76,12 @@ class EditTravelPictureView(LoginRequiredMixin, generic_views.UpdateView):
         return result
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('travel pictures view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('travel pictures view')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeleteTravelPictureView(LoginRequiredMixin, generic_views.DeleteView):
@@ -86,7 +92,9 @@ class DeleteTravelPictureView(LoginRequiredMixin, generic_views.DeleteView):
     context_object_name = 'travel_picture'
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('travel pictures view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('travel pictures view')
+        return super().dispatch(request, *args, **kwargs)

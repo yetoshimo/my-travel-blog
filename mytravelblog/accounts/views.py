@@ -48,10 +48,12 @@ class UserProfileDetailsView(LoginRequiredMixin, generic_views.DetailView):
     context_object_name = 'profile'
 
     def dispatch(self, request, *args, **kwargs):
-        if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
-                request.user == Profile.objects.get(user_id=kwargs['pk']).user:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('profile details', self.request.user.id)
+        if request.user.is_authenticated:
+            if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
+                    request.user == Profile.objects.get(user_id=kwargs['pk']).user:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('profile details', self.request.user.id)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):
@@ -82,11 +84,27 @@ class EditProfileView(LoginRequiredMixin, generic_views.UpdateView):
         user.save()
         return result
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
+                    request.user == Profile.objects.get(user_id=kwargs['pk']).user:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('profile details', self.request.user.id)
+        return super().dispatch(request, *args, **kwargs)
+
 
 class DeleteProfileView(LoginRequiredMixin, generic_views.DeleteView):
     model = UserModel
     template_name = 'accounts/profile/delete_profile_page.html'
     success_url = reverse_lazy('show home')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
+                    request.user == Profile.objects.get(user_id=kwargs['pk']).user:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('profile details', self.request.user.id)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ChangeUserPasswordView(LoginRequiredMixin, auth_views.PasswordChangeView):
@@ -95,3 +113,11 @@ class ChangeUserPasswordView(LoginRequiredMixin, auth_views.PasswordChangeView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('profile details', kwargs={'pk': self.request.user.pk})
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Profile.objects.filter(user_id=kwargs['pk']).exists() and \
+                    request.user == Profile.objects.get(user_id=kwargs['pk']).user:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('profile details', self.request.user.id)
+        return super().dispatch(request, *args, **kwargs)

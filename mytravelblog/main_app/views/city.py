@@ -34,10 +34,12 @@ class VisitedCitiesView(LoginRequiredMixin, generic_views.ListView):
         return super().get_queryset().filter(user=self.request.user).all()
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditVisitedCityView(LoginRequiredMixin, generic_views.UpdateView):
@@ -52,11 +54,16 @@ class EditVisitedCityView(LoginRequiredMixin, generic_views.UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user).all()
+
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedCity.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('cities view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('cities view')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeleteVisitedCityView(LoginRequiredMixin, generic_views.DeleteView):
@@ -67,7 +74,9 @@ class DeleteVisitedCityView(LoginRequiredMixin, generic_views.DeleteView):
     context_object_name = 'city'
 
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedCity.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('cities view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('cities view')
+        return super().dispatch(request, *args, **kwargs)

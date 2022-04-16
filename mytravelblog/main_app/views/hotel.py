@@ -20,10 +20,12 @@ class HotelRegisterView(LoginRequiredMixin, generic_views.CreateView):
         return kwargs
 
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedCity.objects.filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('register city')
+        if request.user.is_authenticated:
+            result = VisitedCity.objects.filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('register city')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class VisitedHotelsView(LoginRequiredMixin, generic_views.ListView):
@@ -36,10 +38,12 @@ class VisitedHotelsView(LoginRequiredMixin, generic_views.ListView):
         return super().get_queryset().filter(user=self.request.user).all()
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user).all()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('show dashboard')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('show dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditVisitedHotelView(LoginRequiredMixin, generic_views.UpdateView):
@@ -56,10 +60,12 @@ class EditVisitedHotelView(LoginRequiredMixin, generic_views.UpdateView):
         return kwargs
 
     def dispatch(self, request, *args, **kwargs):
-        result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('hotels view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('hotels view')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeleteVisitedHotelView(LoginRequiredMixin, generic_views.DeleteView):
@@ -70,7 +76,9 @@ class DeleteVisitedHotelView(LoginRequiredMixin, generic_views.DeleteView):
     context_object_name = 'hotel'
 
     def dispatch(self, request, *args, **kwargs):
-        result = VisitedHotel.objects.filter(user=self.request.user, pk=kwargs['pk']).exists()
-        if result:
-            return super().dispatch(request, *args, **kwargs)
-        return redirect('hotels view')
+        if request.user.is_authenticated:
+            result = super().get_queryset().filter(user=self.request.user, pk=kwargs['pk']).exists()
+            if result:
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('hotels view')
+        return super().dispatch(request, *args, **kwargs)
