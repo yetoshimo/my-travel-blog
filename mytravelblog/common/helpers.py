@@ -13,9 +13,3 @@ class BootstrapFormMixin:
             if 'class' not in field.widget.attrs:
                 field.widget.attrs['class'] = ''
             field.widget.attrs['class'] += 'form-control'
-
-
-# class AuthUserLimitedViewMixin:
-#
-#     def get_queryset(self):
-#         return super().get_queryset().filter(user=self.request.user).all()

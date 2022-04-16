@@ -1,3 +1,5 @@
+import asyncio
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -5,6 +7,26 @@ from django.views import generic as generic_views
 
 from mytravelblog.main_app.forms.travel_entry import *
 from mytravelblog.main_app.models import *
+
+
+async def get_travel_pictures(user):
+    return TravelPicture.objects.filter(user=user).all()
+
+
+async def get_visited_cities(user):
+    return VisitedCity.objects.filter(user=user).all()
+
+
+async def get_visited_hotels(user):
+    return VisitedHotel.objects.filter(user=user).all()
+
+
+async def get_travel_entry_user_related_data(user):
+    return await asyncio.gather(
+        get_visited_cities(user),
+        get_visited_hotels(user),
+        get_travel_pictures(user),
+    )
 
 
 class TravelEntryRegisterView(LoginRequiredMixin, generic_views.CreateView):
@@ -16,9 +38,9 @@ class TravelEntryRegisterView(LoginRequiredMixin, generic_views.CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['visited_city'] = VisitedCity.objects.filter(user=self.request.user).all()
-        kwargs['visited_hotel'] = VisitedHotel.objects.filter(user=self.request.user).all()
-        kwargs['travel_picture'] = TravelPicture.objects.filter(user=self.request.user).all()
+        kwargs['visited_city'], kwargs['visited_hotel'], kwargs['travel_picture'] = asyncio.run(
+            get_travel_entry_user_related_data(self.request.user)
+        )
         return kwargs
 
     def dispatch(self, request, *args, **kwargs):
@@ -57,9 +79,9 @@ class EditTravelEntryView(LoginRequiredMixin, generic_views.UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['visited_city'] = VisitedCity.objects.filter(user=self.request.user).all()
-        kwargs['visited_hotel'] = VisitedHotel.objects.filter(user=self.request.user).all()
-        kwargs['travel_picture'] = TravelPicture.objects.filter(user=self.request.user).all()
+        kwargs['visited_city'], kwargs['visited_hotel'], kwargs['travel_picture'] = asyncio.run(
+            get_travel_entry_user_related_data(self.request.user)
+        )
         return kwargs
 
     def get_success_url(self):
