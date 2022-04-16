@@ -17,7 +17,7 @@
             <br>
             {% if travel_entry.travel_picture %}
                 <a href="{{ travel_entry.travel_picture.travel_picture.url }}" class="thumbnail">
-                    {% cloudinary travel_entry.travel_picture.travel_picture crop='scale' gravity='auto' %}
+                    {% cloudinary travel_entry.travel_picture.travel_picture crop='scale' %}
                 </a>
             {% else %}
                 <img src="{% static 'default_files/default_world_picture.png' %}"

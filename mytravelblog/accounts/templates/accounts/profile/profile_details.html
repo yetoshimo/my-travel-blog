@@ -12,7 +12,7 @@
                 <div class="col-sm-6 text-center">
                     {% if profile.profile_picture %}
                         <a href="{{ profile.profile_picture.url }}" class="thumbnail">
-                            {% cloudinary profile.profile_picture width=300 height=300 crop='scale' gravity='auto' %}
+                            {% cloudinary profile.profile_picture width=300 height=300 crop='scale' %}
                         </a>
                     {% else %}
                         <img src="{% static 'default_files/default_profile_picture.png' %}"
