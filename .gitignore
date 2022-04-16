@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /staticfiles/default_files/invalid_test_file.txt
+/staticfiles/default_files/invalid_big_file.jpg
