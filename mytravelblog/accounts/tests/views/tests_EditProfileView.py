@@ -146,3 +146,19 @@ class EditProfileViewTests(django_tests.TestCase):
             self.assertFalse(p.profile_picture)
             self.assertEqual(f'Max file size is {Profile.MAX_IMAGE_SIZE_IN_MB}.00 MB',
                              response.context_data['form'].errors['profile_picture'][0])
+
+    def test_invalid_file_content_type(self):
+        with open(os.path.join(BASE_DIR,
+                               'staticfiles',
+                               'default_files',
+                               'invalid_test_file.txt'), 'rb') as invalid_picture:
+            data = {
+                'profile_picture': SimpleUploadedFile(
+                    name='default_big_file.JPG',
+                    content=invalid_picture.read(),
+                    content_type='image/png',
+                ),
+            }
+            response = self.client.post(reverse('profile edit', kwargs={'pk': self.user.id}), data=data, user=self.user)
+            self.assertEqual(f'Please select an image file!',
+                             response.context_data['form'].errors['profile_picture'][0])

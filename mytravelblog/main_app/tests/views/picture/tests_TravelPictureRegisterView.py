@@ -1,10 +1,13 @@
+import os.path
 from http import HTTPStatus
 
 from django import test as django_tests
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from mytravelblog.main_app.models import VisitedCity, VisitedHotel, TravelPicture
+from mytravelblog.settings import BASE_DIR
 
 UserModel = get_user_model()
 
@@ -130,3 +133,29 @@ class TravelPictureRegisterViewTests(django_tests.TestCase):
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(f'Picture with title "{self.title}" in {visited_city} already exists!',
                          response.context_data['form'].errors['title'][0])
+
+    def test_invalid_file_content_type(self):
+        visited_city = VisitedCity.objects.create(
+            city_name=self.city_name,
+            country_name=self.country_name,
+            user=self.user,
+        )
+        cities = VisitedCity.objects.filter(user=self.user).all()
+        with open(os.path.join(BASE_DIR,
+                               'staticfiles',
+                               'default_files',
+                               'invalid_test_file.txt'), 'rb') as invalid_picture:
+            data = {
+                'title': self.title,
+                'travel_picture': SimpleUploadedFile(
+                    name='invalid_test_file.txt',
+                    content=invalid_picture.read(),
+                    content_type='image/png',
+                ),
+                'located_city': visited_city.pk,
+            }
+            response = self.client.post(reverse('register travel picture'),
+                                        data=data,
+                                        located_city=cities)
+            self.assertEqual(f'Please select an image file!',
+                             response.context_data['form'].errors['travel_picture'][0])
