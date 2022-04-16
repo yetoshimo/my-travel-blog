@@ -15,7 +15,7 @@
             <br>
             <p>Visited Hotel: {{ travel_entry.visited_hotel.hotel_name }}</p>
             <br>
-            {% if travel_entry.travel_picture %}
+            {% if travel_entry.travel_picture.travel_picture %}
                 <a href="{{ travel_entry.travel_picture.travel_picture.url }}" class="thumbnail">
                     {% cloudinary travel_entry.travel_picture.travel_picture crop='scale' %}
                 </a>
