@@ -1,8 +1,8 @@
 Python Web-Framework Final Project by yetosimo
 
-Live@
+~~Live@~~
 
-https://yetosimo-my-travel-blog-app.herokuapp.com/
+~~https://yetosimo-my-travel-blog-app.herokuapp.com/~~
 
 Media Managed by Cloudinary
 https://cloudinary.com/
